@@ -1,18 +1,21 @@
-// QuizApp.js
-
 import React, { useState } from 'react';
+import lesion from './Lesion.PNG';
+import spot from './Spots.PNG';
+import rings from './rings.jpg';
 
 const Questions = () => {
     const [questions] = useState([
         {
             id: 1,
-            question: 'Is there any fruit symptoms in that plant?',
+            question: 'Is there any specific type of leaf symptoms in that plant?',
             options: ['Yes', 'No'],
+            images: [lesion, spot],
         },
         {
             id: 2,
-            question: 'What is the type of fruit symptom? (You can use the guide and based on that select the option)',
-            options: ['Lesion', 'Spot', 'Concentric ring', 'Irregular'],
+            question: 'What is the type of Leaf symptom?',
+            options: ['Lesion', 'Spot', 'Concentric ring'],
+            images: [lesion, spot, rings],
         },
         {
             id: 3,
@@ -51,6 +54,13 @@ const Questions = () => {
         }
     };
 
+    const handlePreviousQuestion = () => {
+        if (currentQuestion > 0) {
+            setCurrentQuestion(currentQuestion - 1);
+            setSelectedOption(userAnswers[currentQuestion - 1]);
+        }
+    };
+
     const quizContainerStyle = {
         maxWidth: '600px',
         margin: 'auto',
@@ -84,8 +94,23 @@ const Questions = () => {
         color: '#fff',
     };
 
+    const buttonContainerStyle = {
+        display: 'flex',
+        justifyContent: currentQuestion === 0 ? 'flex-end' : 'space-between',
+        marginTop: '20px',
+    };
+
     const nextButtonStyle = {
-        marginTop: '10px',
+        padding: '10px',
+        backgroundColor: '#4caf50',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        fontSize: '16px',
+    };
+
+    const previousButtonStyle = {
         padding: '10px',
         backgroundColor: '#4caf50',
         color: '#fff',
@@ -101,7 +126,7 @@ const Questions = () => {
 
     return (
         <div style={quizContainerStyle}>
-            <h1>Please answer the follwoing questions to make more accurate prediction</h1>
+            <h1>Please answer the following questions to make a more accurate prediction</h1>
             {questions.map((q, index) => (
                 <div key={q.id} style={index === currentQuestion ? activeQuestionStyle : questionStyle}>
                     <p>{q.question}</p>
@@ -109,24 +134,49 @@ const Questions = () => {
                         {q.options.map((option, optionIndex) => (
                             <li
                                 key={optionIndex}
-                                style={option === selectedOption ? selectedOptionStyle : optionStyle}
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    padding: '10px',
+                                    border: '1px solid #ccc',
+                                    borderRadius: '5px',
+                                    marginBottom: '8px',
+                                    cursor: 'pointer',
+                                    transition: 'background-color 0.3s',
+                                    ...(option === selectedOption ? selectedOptionStyle : optionStyle)
+                                }}
                                 onClick={() => handleOptionClick(option)}
                             >
                                 {option}
+                                {q.images && q.images[optionIndex] && (
+                                    <img
+                                        src={q.images[optionIndex]}
+                                        alt={`Image for ${option}`}
+                                        style={{ maxWidth: '200px', maxHeight: '250px', marginLeft: '10px' }}
+                                    />
+                                )}
                             </li>
                         ))}
                     </ul>
                 </div>
             ))}
-            <button
-                style={Object.assign({}, nextButtonStyle, currentQuestion === questions.length - 1 && hoverButtonStyle)}
-                onClick={handleNextQuestion}
-            >
-                {currentQuestion === questions.length - 1 ? 'Finish' : 'Next Question'}
-            </button>
+            <div style={buttonContainerStyle}>
+                <button
+                    style={{ ...previousButtonStyle, display: currentQuestion === 0 ? 'none' : 'inline-block' }}
+                    onClick={handlePreviousQuestion}
+                >
+                    Previous Question
+                </button>
+                <button
+                    style={Object.assign({}, nextButtonStyle, currentQuestion === questions.length - 1 && hoverButtonStyle)}
+                    onClick={handleNextQuestion}
+                >
+                    {currentQuestion === questions.length - 1 ? 'Finish' : 'Next Question'}
+                </button>
+            </div>
         </div>
     );
 };
 
 export default Questions;
-
