@@ -26,8 +26,8 @@ import Clear from '@material-ui/icons/Clear';
 import Select from 'react-select';
 import Box from '@material-ui/core/Box';
 
-
-
+import {options, leaf_symptom_color_option, fruit_symptom_options, fruit_symptom_color_options, stem_symptom_options, stem_symptom_color_options, fungus_symptom_options, fungus_symptom_color_options, wilting_options, leaf_halo_options, leaf_halo_color_options, fruit_halo_options, fruit_halo_color_options, bad_odor_symptom_options, ooze_liquid_symptom_options, cross_section_of_stem_symptom_options, curling_symptom_options } from "./constants/symptomOptions";
+import { Guide } from "./pages/guide";
 
 
 
@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
     backgroundSize: 'cover',
-    height: "150vh",
+    height: "100%",
     marginTop: "8px",
   },
   imageCard: {
@@ -178,7 +178,6 @@ export const ImageUpload = () => {
 
   const sendFile = async (sympom_set) => {
 
-
     let ress = await axios({
       method: "post",
       url: '/extra_symptoms',
@@ -186,8 +185,6 @@ export const ImageUpload = () => {
         "Content-type": "application/json"
       },
       data: sympom_set,
-
-
     });
 
     if (ress.status === 200) {
@@ -205,7 +202,6 @@ export const ImageUpload = () => {
         if (res.status === 200) {
           console.log(res.data)
           setDisease(res.data.disease)
-
         }
 
       } else {
@@ -217,7 +213,6 @@ export const ImageUpload = () => {
         if (res.status === 200) {
           console.log(res.data)
           setPossibleDiseases(res.data.disease)
-
         }
 
       }
@@ -243,17 +238,6 @@ export const ImageUpload = () => {
 
 
   }
-
-  const cardData = [
-    { id: 1, image: rings, title: 'Concenric Rings on Leafs', subtitle: 'Description of Concentric Rings' },
-    { id: 2, image: stem_ring, title: 'Concentric Rings on stem', subtitle: 'Description of Concentric rings on stem' },
-    { id: 3, image: lesion, title: 'Lesions on the leaf', subtitle: 'Description of Lesion' },
-    { id: 4, image: spot, title: 'Spots on the leaf', subtitle: 'Description of Spot' },
-    { id: 5, image: fungus, title: 'White Fungus symptom', subtitle: 'Description of Fungus symptom' },
-    { id: 6, image: halo, title: 'Fruit Halo', subtitle: 'Description of Halo' },
-    { id: 7, image: ooze, title: 'Ooze Liquid', subtitle: 'Description of Ooze Liquid' },
-    { id: 8, image: cross, title: 'Cross section of stem symptom', subtitle: 'Description of cross section stem symptoms' },
-  ];
 
   const clearData = () => {
     setData(null);
@@ -303,119 +287,6 @@ export const ImageUpload = () => {
   if (data) {
     confidence = (parseFloat(data.confidence) * 100).toFixed(2);
   }
-
-  const options = [
-    { value: 'lesions', label: 'Lesions' },
-    { value: 'spots', label: 'Spots' },
-    { value: 'yellowing', label: 'Yellowing' },
-    { value: 'rings', label: 'Concentric Rings' }
-  ]
-
-  const leaf_symptom_color_option = [
-    { value: 'brown', label: 'Brown' },
-    { value: 'black', label: 'Black' },
-    { value: 'yellow', label: 'Yellow' },
-  ]
-
-  const fruit_symptom_options = [
-    { value: 'lesions', label: 'Lesions' },
-    { value: 'spots', label: 'Spots' },
-    { value: 'yellowing', label: 'Yellowing' },
-    { value: 'rings', label: 'Concentric Rings' }
-  ]
-
-  const fruit_symptom_color_options = [
-    { value: 'brown', label: 'Brown' },
-    { value: 'black', label: 'Black' },
-    { value: 'yellow', label: 'Yellow' },
-  ]
-
-  const stem_symptom_options = [
-    { value: 'lesions', label: 'Lesions' },
-    { value: 'spots', label: 'Spots' },
-    { value: 'yellowing', label: 'Yellowing' },
-    { value: 'rings', label: 'Concentric Rings' }
-  ]
-
-  const stem_symptom_color_options = [
-    { value: 'lesions', label: 'Lesions' },
-    { value: 'spots', label: 'Spots' },
-    { value: 'yellowing', label: 'Yellowing' },
-    { value: 'rings', label: 'Concentric Rings' }
-  ]
-
-  const fungus_symptom_options = [
-    { value: 'lesions', label: 'Lesions' },
-    { value: 'spots', label: 'Spots' },
-    { value: 'yellowing', label: 'Yellowing' },
-    { value: 'rings', label: 'Concentric Rings' }
-  ]
-
-  const fungus_symptom_color_options = [
-    { value: 'lesions', label: 'Lesions' },
-    { value: 'spots', label: 'Spots' },
-    { value: 'yellowing', label: 'Yellowing' },
-    { value: 'rings', label: 'Concentric Rings' }
-  ]
-
-
-  const wilting_options = [
-    { value: 'Yes', label: 'Yes' },
-    { value: 'No', label: 'No' },
-
-  ]
-
-
-  const leaf_halo_options = [
-    { value: 'Yes', label: 'Yes' },
-    { value: 'No', label: 'No' },
-
-  ]
-
-  const leaf_halo_color_options = [
-    { value: 'brown', label: 'Brown' },
-    { value: 'black', label: 'Black' },
-    { value: 'yellow', label: 'Yellow' },
-  ]
-
-  const fruit_halo_options = [
-    { value: 'Yes', label: 'Yes' },
-    { value: 'No', label: 'No' },
-  ]
-
-  const fruit_halo_color_options = [
-    { value: 'brown', label: 'Brown' },
-    { value: 'black', label: 'Black' },
-    { value: 'yellow', label: 'Yellow' },
-  ]
-
-  const bad_odor_symptom_options = [
-    { value: 'lesions', label: 'Lesions' },
-    { value: 'spots', label: 'Spots' },
-  ]
-
-  const ooze_liquid_symptom_options = [
-    { value: 'Yes', label: 'Yes' },
-    { value: 'No', label: 'No' },
-  ]
-
-  const cross_section_of_stem_symptom_options = [
-    { value: 'Yes', label: 'Yes' },
-    { value: 'No', label: 'No' },
-  ]
-
-  const curling_symptom_options = [
-    { value: 'Yes', label: 'Yes' },
-    { value: 'No', label: 'No' },
-  ]
-
-
-
-
-
-
-
-
 
   const customStyles = {
     control: (base) => ({
@@ -877,33 +748,7 @@ export const ImageUpload = () => {
               </ColorButton>
             </Grid>}
 
-          {selectedTab === 1 &&
-            <div style={{ height: '1000px', overflowY: 'scroll', width: '100%' }}>
-              <Container>
-                {cardData.map((card) => (
-                  <Card style={{ display: 'flex', marginBottom: '10px', borderRadius: '8px', backgroundColor: '#f0f0f0', height: '200px' }}>
-                    <CardMedia
-                      component="img"
-                      style={{ width: '25%', height: '200px' }} // Image takes up 25% (one quarter) of the card
-                      image={card.image}
-                      alt="Live from space album cover"
-                    />
-                    <CardContent style={{ flex: '1' }}>
-                      <Typography component="div" variant="h5">
-                        {card.title}
-                      </Typography>
-                      <Typography variant="subtitle1" color="text.secondary" component="div">
-                        {card.subtitle}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                ))}
-              </Container>
-            </div>
-          }
-
-
-
+          {selectedTab === 1 && <Guide />}
 
         </Grid >
       </Container >
