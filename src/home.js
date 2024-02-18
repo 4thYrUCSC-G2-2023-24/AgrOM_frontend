@@ -30,6 +30,8 @@ import {options, leaf_symptom_color_option, fruit_symptom_options, fruit_symptom
 import { Guide } from "./pages/guide";
 import Questions from "./questions";
 
+import { containerStyles, containerStyles2, labelStyles, buttonStyles } from "./assets/styles/home";
+import { PredictOption } from "./pages/predictOption";
 
 
 const ColorButton = withStyles((theme) => ({
@@ -41,9 +43,13 @@ const ColorButton = withStyles((theme) => ({
     },
   },
 }))(Button);
+
 const axios = require("axios").default;
 
 const useStyles = makeStyles((theme) => ({
+  title:{
+    fontFamily: "Montserrat"
+  },
   grow: {
     flexGrow: 1,
   },
@@ -78,6 +84,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: 'cover',
     height: "100%",
     marginTop: "8px",
+    fontFamily: "verdana"
   },
   imageCard: {
     margin: "auto",
@@ -174,6 +181,8 @@ export const ImageUpload = () => {
   const [disease, setDisease] = useState();
   const [possibleDiseases, setPossibleDiseases] = useState();
   const [selectedTab, setSelectedTab] = React.useState(0);
+
+  const [predictStep, setPredictStep] = useState(0);
 
   let confidence = 0;
 
@@ -304,42 +313,6 @@ export const ImageUpload = () => {
     }),
   };
 
-  // const containerStyles = {
-  //   marginTop: '10px',
-  //   display: 'flex',
-  //   flexDirection: 'column',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // };
-
-  const containerStyles = {
-    marginTop: '10px',
-    display: 'flex',
-    justifyContent: 'space-around',
-  };
-
-  const labelStyles = {
-    color: 'white', // Change 'red' to the color you desire
-    marginBottom: '10px', // Add margin-bottom for spacing
-  };
-
-  const buttonStyles = {
-    backgroundColor: 'green',
-    color: 'white',
-    border: 'none',
-    padding: '10px 20px',
-    cursor: 'pointer',
-    borderRadius: '10px',
-
-  };
-
-  const containerStyles2 = {
-    marginTop: '20px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  };
-
   const handleSubmit = () => {
 
     var sympom_set = {
@@ -447,7 +420,7 @@ export const ImageUpload = () => {
     <React.Fragment>
       <AppBar position="static" className={classes.appbar}>
         <Toolbar>
-          <Typography className={classes.title} variant="h6" noWrap>
+          <Typography className={classes.title} variant="h6" noWrap href = "#" sx={{fontFamily : "monospace"}}>
             AgrOM : Hybrid Tomato Plant Disease Detection System
           </Typography>
           <div className={classes.grow} />
@@ -470,8 +443,37 @@ export const ImageUpload = () => {
           alignItems="center"
           spacing={2}
         >
-          {selectedTab === 1 && <Grid item xs={12}>
-            <Card className={`${classes.imageCard} ${!image ? classes.imageCardEmpty : ''}`}>
+          { selectedTab === 0 && <div>Home</div>}
+
+          { selectedTab === 1 && predictStep === 0 && 
+            // <PredictOption predictStep={predictStep} onStepChange={setPredictStep}/>
+            <div className="layoutDiv" style={{ height: '70vh', marginBottom:'60px', overflowY: 'hidden', width: '90%', textAlign:"center", backgroundColor:"white" }}>
+              <Container>
+                <div style={{height: '5vh', padding: '10px', textAlign: 'left', fontFamily: 'cambria', fontSize: '25px'}}>
+                    Choose your option
+                </div>
+                <div style={{height:'55vh', display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center'}}>
+                    <Button defaultValue={1} value={1}
+                        variant="outlined" onClick={(e)=>{setPredictStep(1)}} 
+                        style={{width: '30%', height: '50vh', borderWidth: '10px', border: '3px solid green', borderRadius: '30px'}}>
+                        <Typography variant="h6">
+                        Predict using Leaf images
+                        </Typography>
+                    </Button>
+                    <Button defaultValue={2} value={2} variant="outlined" onClick={(e)=>{setPredictStep(2)}} 
+                        style={{width: '30%', height: '50vh', borderWidth: '10px', border: '3px solid green', borderRadius: '30px'}}>
+                        <Typography variant="h6"> Predict without images </Typography>
+                    </Button>
+                </div>
+              </Container>
+            </div>
+          }
+
+          {selectedTab === 1 && predictStep === 1 &&  <Grid item xs={12}>
+              <ColorButton variant="contained" color="primary" component="div" onClick={(e)=>{setPredictStep(0)}} >
+                Go Back
+              </ColorButton>
+              <Card className={`${classes.imageCard} ${!image ? classes.imageCardEmpty : ''}`} style={{height:"350px"}}>
               {image && <CardActionArea>
                 <CardMedia
                   className={classes.media}

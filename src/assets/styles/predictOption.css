@@ -1,0 +1,8 @@
+.layoutDiv  {
+    height: 70vh;
+    margin-bottom : 60px; 
+    overflow-y: hidden; 
+    width: 90%; 
+    text-align: center; 
+    background-color:"white"; 
+}
