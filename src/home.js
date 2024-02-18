@@ -28,6 +28,7 @@ import Box from '@material-ui/core/Box';
 
 import {options, leaf_symptom_color_option, fruit_symptom_options, fruit_symptom_color_options, stem_symptom_options, stem_symptom_color_options, fungus_symptom_options, fungus_symptom_color_options, wilting_options, leaf_halo_options, leaf_halo_color_options, fruit_halo_options, fruit_halo_color_options, bad_odor_symptom_options, ooze_liquid_symptom_options, cross_section_of_stem_symptom_options, curling_symptom_options } from "./constants/symptomOptions";
 import { Guide } from "./pages/guide";
+import Questions from "./questions";
 
 
 
@@ -442,8 +443,6 @@ export const ImageUpload = () => {
 
   };
 
-
-
   return (
     <React.Fragment>
       <AppBar position="static" className={classes.appbar}>
@@ -454,10 +453,9 @@ export const ImageUpload = () => {
           <div className={classes.grow} />
           <Tabs value={selectedTab} onChange={handleTabChange}>
             <Tab label="Home" />
+            <Tab label="Predict" />
             <Tab label="Guide" />
-            <Tab label="Logout" />
-
-
+            <Tab label="Questions" />
             {/* Add more tabs as needed */}
           </Tabs>
           <Avatar src={logo} className={classes.logo}></Avatar>
@@ -472,14 +470,14 @@ export const ImageUpload = () => {
           alignItems="center"
           spacing={2}
         >
-          {selectedTab === 0 && <Grid item xs={12}>
+          {selectedTab === 1 && <Grid item xs={12}>
             <Card className={`${classes.imageCard} ${!image ? classes.imageCardEmpty : ''}`}>
               {image && <CardActionArea>
                 <CardMedia
                   className={classes.media}
                   image={preview}
                   component="image"
-                  title="Contemplative Reptile"
+                  title="Leaf symptom"
                 />
               </CardActionArea>
               }
@@ -517,13 +515,6 @@ export const ImageUpload = () => {
                 </Typography>
               </CardContent>} */}
             </Card>
-            {/* <div style={containerStyles}>
-              <label htmlFor="selectField">Select Field:</label>
-              <Select
-                styles={customStyles}
-                options={options}
-              />
-            </div> */}
 
             <div style={containerStyles}>
               <div>
@@ -709,17 +700,13 @@ export const ImageUpload = () => {
               </div>
             </div>
 
-
             <div style={containerStyles2}>
               <button onClick={handleSubmit} style={buttonStyles}>Submit</button>
             </div>
 
-
-
-
-
           </Grid>}
-          {data && selectedTab === 0 &&
+
+          {data && selectedTab === 1 &&
             <Grid item className={classes.buttonGrid} >
 
               <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
@@ -727,7 +714,7 @@ export const ImageUpload = () => {
               </ColorButton>
             </Grid>}
 
-          {disease && selectedTab === 0 &&
+          {disease && selectedTab === 1 &&
             <Grid item className={classes.buttonGrid} >
 
               <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
@@ -735,7 +722,7 @@ export const ImageUpload = () => {
               </ColorButton>
             </Grid>}
 
-          {possibleDiseases && selectedTab === 0 &&
+          {possibleDiseases && selectedTab === 1 &&
             <Grid item className={classes.buttonGrid} >
 
               <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
@@ -748,7 +735,9 @@ export const ImageUpload = () => {
               </ColorButton>
             </Grid>}
 
-          {selectedTab === 1 && <Guide />}
+          {selectedTab === 2 && <Guide />}
+
+          {selectedTab === 3 && <Questions />}
 
         </Grid >
       </Container >
