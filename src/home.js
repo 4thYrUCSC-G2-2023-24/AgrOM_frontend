@@ -191,10 +191,10 @@ export const ImageUpload = () => {
   const [possibleDiseases, setPossibleDiseases] = useState();
   const [selectedTab, setSelectedTab] = React.useState(0);
 
-  const [predictStep, setPredictStep] = useState(0);
+  const [predictOption, setPredictOption] = useState(0);
 
-  const handlePredictStep = (stepOption) => {
-    setPredictStep(stepOption);
+  const handlePredictOption = (stepOption) => {
+    setPredictOption(stepOption);
   }
 
   let confidence = 0;
@@ -459,16 +459,16 @@ export const ImageUpload = () => {
           spacing={2}
         >
 
-          { selectedTab === 1 && predictStep === 0 && 
-            <PredictOption predictStep={predictStep} onStepChange={handlePredictStep}/>
+          { selectedTab === 1 && predictOption === 0 && 
+            <PredictOption predictOption={predictOption} onOptionChange={handlePredictOption}/>
           }
 
-          { selectedTab === 1 && predictStep === 2 && 
-            <PredictOption predictStep={predictStep} onStepChange={handlePredictStep}/>
+          { selectedTab === 1 && predictOption === 2 && 
+            <PredictOption predictOption={predictOption} onOptionChange={handlePredictOption}/>
           }
 
-          {selectedTab === 1 && predictStep === 1 &&  <Grid item xs={12}>
-              <ColorButton variant="contained" color="primary" component="div" onClick={(e)=>{setPredictStep(0)}} >
+          {selectedTab === 1 && predictOption === 1 &&  <Grid item xs={12}>
+              <ColorButton variant="contained" color="primary" component="div" onClick={(e)=>{setPredictOption(0)}} >
                 Go Back
               </ColorButton>
               <Card className={`${classes.imageCard} ${!image ? classes.imageCardEmpty : ''}`} style={{height:"350px"}}>

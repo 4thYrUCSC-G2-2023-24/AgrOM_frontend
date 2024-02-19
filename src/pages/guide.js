@@ -16,7 +16,7 @@ export const Guide = ()=>{
 
     return (
         <div style={{ height: '100%', overflowY: 'hidden', width: '90%', textAlign:"center" }}>
-                <textarea value="Enter text to search." onChange={handleSearchChange} style={{width:"40%", alignSelf: "center", padding: "5px", marginBottom: "20px"}}/>
+                <textarea onChange={handleSearchChange} style={{width:"40%", alignSelf: "center", padding: "5px", marginBottom: "20px"}}/>
               <Container>
                 {console.log(cardData)}
                 {cardData.map((card) => (

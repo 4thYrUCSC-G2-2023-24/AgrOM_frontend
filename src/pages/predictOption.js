@@ -1,15 +1,12 @@
 import { Button, Card, CardContent, CardMedia, Container, Typography } from "@material-ui/core";
-import { lightGreen } from "@material-ui/core/colors";
-import { useCallback } from "react";
 
 import './../assets/styles/predictOption.css';
 
 
-export const PredictOption = ({predictStep, onStepChange})=>{
+export const PredictOption = ({predictOption, onOptionChange})=>{
 
     const handleOnClick = async (value) => {
-        console.log("haiii");
-        onStepChange(value);
+        onOptionChange(value);
     }
 
     return (
