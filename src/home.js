@@ -12,14 +12,15 @@ import CardContent from "@material-ui/core/CardContent";
 import { Paper, CardActionArea, CardMedia, Grid, TableContainer, Table, TableBody, TableHead, TableRow, TableCell, Button, CircularProgress } from "@material-ui/core";
 import logo from "./logo.png";
 import image from "./bg2.jpg";
-import ooze from "./ooze.png";
-import halo from './halo.png';
-import cross from './cross_section.png'
-import rings from './rings.jpg'
-import stem_ring from './stem_rings.PNG'
-import lesion from './Lesion.PNG'
-import spot from './Spots.PNG'
-import fungus from './Fungus.png'
+import image2 from "./tomato-bg.JPG";
+// import ooze from "./ooze.png";
+// import halo from './halo.png';
+// import cross from './cross_section.png'
+// import rings from './rings.jpg'
+// import stem_ring from './stem_rings.PNG'
+// import lesion from './Lesion.PNG'
+// import spot from './Spots.PNG'
+// import fungus from './Fungus.png'
 import { DropzoneArea } from 'material-ui-dropzone';
 import { common } from '@material-ui/core/colors';
 import Clear from '@material-ui/icons/Clear';
@@ -32,6 +33,7 @@ import Questions from "./questions";
 
 import { containerStyles, containerStyles2, labelStyles, buttonStyles } from "./assets/styles/home";
 import { PredictOption } from "./pages/predictOption";
+import HomePage from "./pages/homePage";
 
 
 const ColorButton = withStyles((theme) => ({
@@ -78,7 +80,8 @@ const useStyles = makeStyles((theme) => ({
     padding: "4em 1em 0 1em",
   },
   mainContainer: {
-    backgroundImage: `url(${image})`,
+    // backgroundImage: `url(${image})`,
+    backgroundImage: `url(${image2})`,
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
     backgroundSize: 'cover',
@@ -156,9 +159,15 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   appbar: {
-    background: '#008000',
+    background: '#193a1e',
     boxShadow: 'none',
-    color: 'white'
+    color: 'white',
+  },
+  footer: {
+    backgroundColor: '#193a1e',
+    marginTop: 'auto',
+    // backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(6),
   },
   loader: {
     color: '#be6a77 !important',
@@ -183,6 +192,10 @@ export const ImageUpload = () => {
   const [selectedTab, setSelectedTab] = React.useState(0);
 
   const [predictStep, setPredictStep] = useState(0);
+
+  const handlePredictStep = (stepOption) => {
+    setPredictStep(stepOption);
+  }
 
   let confidence = 0;
 
@@ -420,8 +433,8 @@ export const ImageUpload = () => {
     <React.Fragment>
       <AppBar position="static" className={classes.appbar}>
         <Toolbar>
-          <Typography className={classes.title} variant="h6" noWrap href = "#" sx={{fontFamily : "monospace"}}>
-            AgrOM : Hybrid Tomato Plant Disease Detection System
+          <Typography className={classes.title} variant="h6" noWrap href = "#" sx={{flexGrow: 1 }}>
+            AgrOM : A Hybrid System
           </Typography>
           <div className={classes.grow} />
           <Tabs value={selectedTab} onChange={handleTabChange}>
@@ -434,7 +447,9 @@ export const ImageUpload = () => {
           <Avatar src={logo} className={classes.logo}></Avatar>
         </Toolbar>
       </AppBar>
-      <Container maxWidth={false} className={classes.mainContainer} disableGutters={true}>
+      { selectedTab === 0 && <HomePage changeSelectTab={setSelectedTab} />}
+      { selectedTab !== 0 && 
+      <Container maxWidth={false} className={classes.mainContainer} disableGutters={true}>        
         <Grid
           className={classes.gridContainer}
           container
@@ -443,25 +458,24 @@ export const ImageUpload = () => {
           alignItems="center"
           spacing={2}
         >
-          { selectedTab === 0 && <div>Home</div>}
 
           { selectedTab === 1 && predictStep === 0 && 
-            // <PredictOption predictStep={predictStep} onStepChange={setPredictStep}/>
+            // <PredictOption predictStep={predictStep} onStepChange={handlePredictStep}/>
             <div className="layoutDiv" style={{ height: '70vh', marginBottom:'60px', overflowY: 'hidden', width: '90%', textAlign:"center", backgroundColor:"white" }}>
               <Container>
-                <div style={{height: '5vh', padding: '10px', textAlign: 'left', fontFamily: 'cambria', fontSize: '25px'}}>
+                <div style={{ margin: '10px', height: '5vh', padding: '10px', textAlign: 'left', fontFamily: 'georgia', fontSize: '25px'}}>
                     Choose your option
                 </div>
-                <div style={{height:'55vh', display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center'}}>
+                <div style={{height:'55vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center'}}>
                     <Button defaultValue={1} value={1}
                         variant="outlined" onClick={(e)=>{setPredictStep(1)}} 
-                        style={{width: '30%', height: '50vh', borderWidth: '10px', border: '3px solid green', borderRadius: '30px'}}>
+                        style={{width: '90%', height: '30%', borderWidth: '10px', border: '3px solid green', borderRadius: '30px'}}>
                         <Typography variant="h6">
                         Predict using Leaf images
                         </Typography>
                     </Button>
                     <Button defaultValue={2} value={2} variant="outlined" onClick={(e)=>{setPredictStep(2)}} 
-                        style={{width: '30%', height: '50vh', borderWidth: '10px', border: '3px solid green', borderRadius: '30px'}}>
+                        style={{width: '90%', height: '30%', borderWidth: '10px', border: '3px solid green', borderRadius: '30px'}}>
                         <Typography variant="h6"> Predict without images </Typography>
                     </Button>
                 </div>
@@ -743,6 +757,15 @@ export const ImageUpload = () => {
 
         </Grid >
       </Container >
+      }
+      <footer className={classes.footer}>
+        <Typography variant="h6" align="center" gutterBottom>
+          Website Footer
+        </Typography>
+        <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </Typography>
+      </footer>
     </React.Fragment >
   );
 };

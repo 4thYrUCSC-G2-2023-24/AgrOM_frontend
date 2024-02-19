@@ -7,9 +7,9 @@ import './../assets/styles/predictOption.css';
 
 export const PredictOption = ({predictStep, onStepChange})=>{
 
-    const handleOnClick = useCallback(e => {
+    const handleOnClick = useCallback(value => {
         console.log("haiii");
-        onStepChange(e.target.value);
+        onStepChange(value);
         console.log(predictStep);
     }, [onStepChange, predictStep]);
 
@@ -19,16 +19,16 @@ export const PredictOption = ({predictStep, onStepChange})=>{
                 <div style={{height: '5vh', padding: '10px', textAlign: 'left', fontFamily: 'cambria', fontSize: '25px'}}>
                     Choose your option
                 </div>
-                <div style={{height:'55vh', display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center'}}>
+                <div style={{height:'55vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center'}}>
                     <Button defaultValue={1} value={1}
-                        variant="outlined" onClick={handleOnClick} 
-                        style={{width: '30%', height: '50vh', borderWidth: '10px', border: '3px solid green', borderRadius: '30px'}}>
+                        variant="outlined" onClick={handleOnClick(1)} 
+                        style={{width: '100%', height: '30%', borderWidth: '10px', border: '3px solid green', borderRadius: '30px'}}>
                         <Typography variant="h6">
                         Predict using Leaf images
                         </Typography>
                     </Button>
-                    <Button defaultValue={2} value={2} variant="outlined" onClick={handleOnClick} 
-                        style={{width: '30%', height: '50vh', borderWidth: '10px', border: '3px solid green', borderRadius: '30px'}}>
+                    <Button defaultValue={2} value={2} variant="outlined" onClick={handleOnClick(2)} 
+                        style={{width: '100%', height: '30%', borderWidth: '10px', border: '3px solid green', borderRadius: '30px'}}>
                         <Typography variant="h6"> Predict without images </Typography>
                     </Button>
                 </div>
