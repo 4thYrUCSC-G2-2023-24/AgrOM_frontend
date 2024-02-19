@@ -3,7 +3,7 @@ import { Button, Card, CardContent, CardMedia, Container, Typography } from "@ma
 import './../assets/styles/predictOption.css';
 
 
-export const PredictOption = ({predictOption, onOptionChange})=>{
+export const PredictOption = ({onOptionChange})=>{
 
     const handleOnClick = async (value) => {
         onOptionChange(value);

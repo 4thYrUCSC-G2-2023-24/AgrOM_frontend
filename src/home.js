@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import { Tabs, Tab } from '@material-ui/core';
+import { Tabs, Tab, Stepper, Step, StepLabel } from '@material-ui/core';
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -111,38 +111,6 @@ const useStyles = makeStyles((theme) => ({
   uploadIcon: {
     background: 'white',
   },
-  tableContainer: {
-    backgroundColor: 'transparent !important',
-    boxShadow: 'none !important',
-  },
-  table: {
-    backgroundColor: 'transparent !important',
-  },
-  tableHead: {
-    backgroundColor: 'transparent !important',
-  },
-  tableRow: {
-    backgroundColor: 'transparent !important',
-  },
-  tableCell: {
-    fontSize: '22px',
-    backgroundColor: 'transparent !important',
-    borderColor: 'transparent !important',
-    color: '#000000a6 !important',
-    fontWeight: 'bolder',
-    padding: '1px 24px 1px 16px',
-  },
-  tableCell1: {
-    fontSize: '14px',
-    backgroundColor: 'transparent !important',
-    borderColor: 'transparent !important',
-    color: '#000000a6 !important',
-    fontWeight: 'bolder',
-    padding: '1px 24px 1px 16px',
-  },
-  tableBody: {
-    backgroundColor: 'transparent !important',
-  },
   text: {
     color: 'white !important',
     textAlign: 'center',
@@ -169,6 +137,18 @@ const useStyles = makeStyles((theme) => ({
     // backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
   },
+  stepper: {
+    background: 'transparent',
+  },
+  step: {
+    '& .MuiStepIcon-active': {
+      color: 'green', // Change the color of the step icons to green
+    },
+    '& .MuiStepIcon-completed': {
+      color: 'green', // Change the color of the step icons to green
+    },
+  },
+
   loader: {
     color: '#be6a77 !important',
   },
@@ -192,9 +172,20 @@ export const ImageUpload = () => {
   const [selectedTab, setSelectedTab] = React.useState(0);
 
   const [predictOption, setPredictOption] = useState(0);
+  const [predictStep, setPredictStep] = useState(0);
 
-  const handlePredictOption = (stepOption) => {
+  const handlePredictOption = async (stepOption) => {
     setPredictOption(stepOption);
+    if(stepOption === 1){
+      handlePredictStep(1);
+    }
+    else{
+      handlePredictStep(0);
+    }
+  }
+
+  const handlePredictStep = async (step) => {
+    setPredictStep(step);
   }
 
   let confidence = 0;
@@ -272,7 +263,11 @@ export const ImageUpload = () => {
 
   };
 
-
+  const steps = [
+    'Insert Tomato Leaf image',
+    'Answer questions on extra symptoms',
+    'Get your result',
+  ];
 
   useEffect(() => {
     if (!selectedFile) {
@@ -460,17 +455,32 @@ export const ImageUpload = () => {
         >
 
           { selectedTab === 1 && predictOption === 0 && 
-            <PredictOption predictOption={predictOption} onOptionChange={handlePredictOption}/>
+            <PredictOption predictOption={predictOption} onOptionChange={handlePredictOption} onStepChange={handlePredictStep }/>
           }
 
           { selectedTab === 1 && predictOption === 2 && 
-            <PredictOption predictOption={predictOption} onOptionChange={handlePredictOption}/>
+            <PredictOption predictOption={predictOption} onOptionChange={handlePredictOption} />
           }
 
-          {selectedTab === 1 && predictOption === 1 &&  <Grid item xs={12}>
+          {selectedTab === 1 && predictOption === 1 && predictStep === 1 && <Grid item xs={12}>
+            <Grid container xs={12} style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '5px'}}>
               <ColorButton variant="contained" color="primary" component="div" onClick={(e)=>{setPredictOption(0)}} >
                 Go Back
               </ColorButton>
+
+            <div style={containerStyles2}>
+              <button onClick={e => handlePredictStep(2)} style={buttonStyles}>Submit</button>
+            </div>
+            </Grid>
+              <Box style={{backgroundColor: 'white', maxWidth: '100%', padding: '5px', marginBottom: '40px'}}>
+                <Stepper activeStep={0} alternativeLabel className={classes.stepper}>
+                  {steps.map((label) => (
+                    <Step key={label} >
+                      <StepLabel className={classes.step}>{label}</StepLabel>
+                    </Step>
+                  ))}
+                </Stepper>
+
               <Card className={`${classes.imageCard} ${!image ? classes.imageCardEmpty : ''}`} style={{height:"350px"}}>
               {image && <CardActionArea>
                 <CardMedia
@@ -488,32 +498,41 @@ export const ImageUpload = () => {
                   onChange={onSelectFile}
                 />
               </CardContent>}
-              {/* {data && <CardContent className={classes.detail}>
-                <TableContainer component={Paper} className={classes.tableContainer}>
-                  <Table className={classes.table} size="small" aria-label="simple table">
-                    <TableHead className={classes.tableHead}>
-                      <TableRow className={classes.tableRow}>
-                        <TableCell className={classes.tableCell1}>Label:</TableCell>
-                        <TableCell align="right" className={classes.tableCell1}>Confidence:</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody className={classes.tableBody}>
-                      <TableRow className={classes.tableRow}>
-                        <TableCell component="th" scope="row" className={classes.tableCell}>
-                          {data.class}
-                        </TableCell>
-                        <TableCell align="right" className={classes.tableCell}>{confidence}%</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </CardContent>} */}
-              {/* {isLoading && <CardContent className={classes.detail}>
-                <CircularProgress color="secondary" className={classes.loader} />
-                <Typography className={classes.title} variant="h6" noWrap>
-                  Processing
-                </Typography>
-              </CardContent>} */}
+            </Card>
+            </Box>
+
+          </Grid>}
+          
+          {selectedTab === 1 && predictOption === 1 && predictStep === 2 &&  <Grid item xs={12}>
+              <ColorButton variant="contained" color="primary" component="div" onClick={(e)=>{setPredictOption(0)}} >
+                Go Back
+              </ColorButton>
+              
+                <Stepper activeStep={1} alternativeLabel className={classes.stepper}>
+                  {steps.map((label) => (
+                    <Step key={label} >
+                      <StepLabel className={classes.step}>{label}</StepLabel>
+                    </Step>
+                  ))}
+                </Stepper>
+
+              <Card className={`${classes.imageCard} ${!image ? classes.imageCardEmpty : ''}`} style={{height:"350px"}}>
+              {image && <CardActionArea>
+                <CardMedia
+                  className={classes.media}
+                  image={preview}
+                  component="image"
+                  title="Leaf symptom"
+                />
+              </CardActionArea>
+              }
+              {!image && <CardContent className={classes.content}>
+                <DropzoneArea
+                  acceptedFiles={['image/*']}
+                  dropzoneText={"Drag and drop an image of a tomato plant leaf to process"}
+                  onChange={onSelectFile}
+                />
+              </CardContent>}
             </Card>
 
             <div style={containerStyles}>

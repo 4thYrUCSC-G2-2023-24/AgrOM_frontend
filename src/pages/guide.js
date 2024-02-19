@@ -1,6 +1,5 @@
 import { Container } from "@material-ui/core";
 import { GuideCard } from "../components/guide/guideCard";
-
 import { cardData } from "../constants/guideCard";
 import { useState } from "react";
 
