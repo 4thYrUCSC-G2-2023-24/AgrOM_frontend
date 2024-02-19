@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Box, Button, Container, Grid, Paper, Slider, Tab, Tabs, Toolbar, Typography, makeStyles } from '@material-ui/core';
+import { Box, Button, Container, Grid, Paper, Typography, makeStyles } from '@material-ui/core';
 
 import bg from './../tomato-bg.JPG';
 import bg2 from './../tomato-bg2.jpg';

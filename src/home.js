@@ -460,27 +460,11 @@ export const ImageUpload = () => {
         >
 
           { selectedTab === 1 && predictStep === 0 && 
-            // <PredictOption predictStep={predictStep} onStepChange={handlePredictStep}/>
-            <div className="layoutDiv" style={{ height: '70vh', marginBottom:'60px', overflowY: 'hidden', width: '90%', textAlign:"center", backgroundColor:"white" }}>
-              <Container>
-                <div style={{ margin: '10px', height: '5vh', padding: '10px', textAlign: 'left', fontFamily: 'georgia', fontSize: '25px'}}>
-                    Choose your option
-                </div>
-                <div style={{height:'55vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center'}}>
-                    <Button defaultValue={1} value={1}
-                        variant="outlined" onClick={(e)=>{setPredictStep(1)}} 
-                        style={{width: '90%', height: '30%', borderWidth: '10px', border: '3px solid green', borderRadius: '30px'}}>
-                        <Typography variant="h6">
-                        Predict using Leaf images
-                        </Typography>
-                    </Button>
-                    <Button defaultValue={2} value={2} variant="outlined" onClick={(e)=>{setPredictStep(2)}} 
-                        style={{width: '90%', height: '30%', borderWidth: '10px', border: '3px solid green', borderRadius: '30px'}}>
-                        <Typography variant="h6"> Predict without images </Typography>
-                    </Button>
-                </div>
-              </Container>
-            </div>
+            <PredictOption predictStep={predictStep} onStepChange={handlePredictStep}/>
+          }
+
+          { selectedTab === 1 && predictStep === 2 && 
+            <PredictOption predictStep={predictStep} onStepChange={handlePredictStep}/>
           }
 
           {selectedTab === 1 && predictStep === 1 &&  <Grid item xs={12}>
