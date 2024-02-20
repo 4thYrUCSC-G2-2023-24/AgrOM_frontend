@@ -1,6 +1,7 @@
 import { Button, Card, CardContent, CardMedia, Container, Typography } from "@material-ui/core";
 
 import './../assets/styles/predictOption.css';
+import image2 from "./../tomato-bg.JPG";
 
 
 export const PredictOption = ({onOptionChange})=>{
@@ -10,21 +11,20 @@ export const PredictOption = ({onOptionChange})=>{
     }
 
     return (
-        <div className="layoutDiv" style={{ height: '70vh', marginBottom:'60px', overflowY: 'hidden', width: '90%', textAlign:"center", backgroundColor:"white" }}>
+        <div className="layoutDiv" style={{backgroundImage: `url(${image2})`, backgroundSize: 'cover'}}>
               <Container>
-                <div style={{margin: '10px', height: '5vh', padding: '10px', textAlign: 'left', fontFamily: 'georgia', fontSize: '25px'}}>
+                <div className="layoutTitle">
                     Choose your option
                 </div>
-                <div style={{height:'55vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center'}}>
-                    <Button defaultValue={1} value={1}
-                        variant="outlined" onClick={e => handleOnClick(1)} 
-                        style={{width: '90%', height: '30%', borderWidth: '10px', border: '3px solid green', borderRadius: '30px'}}>
+                <div className="buttonBox">
+                    <Button className='button' variant="outlined" onClick={e => handleOnClick(1)} 
+                        style={{width: '40%', height: '40vh', padding: '5px', border: '3px solid green', borderRadius: '30px'}}>
                         <Typography variant="h6">
                         Predict using Leaf images
                         </Typography>
                     </Button>
-                    <Button defaultValue={2} value={2} variant="outlined" onClick={e => handleOnClick(2)} 
-                        style={{width: '90%', height: '30%', borderWidth: '10px', border: '3px solid green', borderRadius: '30px'}}>
+                    <Button className='button' variant="outlined" onClick={e => handleOnClick(2)} 
+                        style={{width: '40%', height: '40vh', border: '3px solid green', borderRadius: '30px'}}>
                         <Typography variant="h6"> Predict without images </Typography>
                     </Button>
                 </div>

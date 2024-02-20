@@ -25,7 +25,13 @@ const useStyles = makeStyles((theme) => ({
     padding: '10px',
     fontFamily: 'georgia',
     maxWidth: '50%',
-    backgroundColor: '#2f0f0f',    
+    backgroundColor: '#2f0f0f',
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '40px',
+      maxWidth: '100%',
+      padding: '5px',
+      backgroundColor: '#2f0f0f',
+    },  
   },
   section1Button: {
     padding: '10px',

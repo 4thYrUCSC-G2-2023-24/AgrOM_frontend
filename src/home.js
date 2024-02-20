@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import { Tabs, Tab, Stepper, Step, StepLabel } from '@material-ui/core';
+import { Tabs, Tab, Stepper, Step, StepLabel, IconButton, Drawer, List, ListItem, ListItemText, useMediaQuery, useTheme } from '@material-ui/core';
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -34,7 +34,6 @@ import Questions from "./questions";
 import { containerStyles, containerStyles2, labelStyles, buttonStyles } from "./assets/styles/home";
 import { PredictOption } from "./pages/predictOption";
 import HomePage from "./pages/homePage";
-
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -77,14 +76,15 @@ const useStyles = makeStyles((theme) => ({
   },
   gridContainer: {
     justifyContent: "center",
-    padding: "4em 1em 0 1em",
+    padding: "3em 3em 0 3em",
   },
   mainContainer: {
     // backgroundImage: `url(${image})`,
-    backgroundImage: `url(${image2})`,
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
+    // backgroundImage: `url(${image2})`,
+    // backgroundRepeat: 'no-repeat',
+    // backgroundPosition: 'center',
+    // backgroundSize: 'cover',
+    backgroundColor: 'white',
     height: "100%",
     marginTop: "8px",
     fontFamily: "verdana"
@@ -432,7 +432,7 @@ export const ImageUpload = () => {
             AgrOM : A Hybrid System
           </Typography>
           <div className={classes.grow} />
-          <Tabs value={selectedTab} onChange={handleTabChange}>
+            <Tabs value={selectedTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
             <Tab label="Home" />
             <Tab label="Predict" />
             <Tab label="Guide" />

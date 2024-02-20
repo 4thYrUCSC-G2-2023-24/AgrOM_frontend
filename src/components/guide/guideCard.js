@@ -1,4 +1,5 @@
-import { Card, CardContent, CardMedia, Typography } from "@material-ui/core";
+import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from "@material-ui/core";
+import './../../assets/styles/guide.css';
 
 export const GuideCard = (props)=>{
 
@@ -7,21 +8,26 @@ export const GuideCard = (props)=>{
     console.log(card)
 
     return (
-        <Card style={{ display: 'flex', marginBottom: '10px', borderRadius: '20px', backgroundColor: '#ffffff', textAlign:"left" ,height: '220px' }}>
-                    <CardMedia
-                      component="img"
-                      style={{ width: '25%', height: '200px', padding: '10px', borderRadius: '30px' }} // Image takes up 25% (one quarter) of the card
-                      image={card.props.image}
-                      alt={card.props.title}
-                    />
-                    <CardContent>
-                      <Typography gutterBottom component="div" variant="h5">
-                        {card.props.title}
-                      </Typography>
-                      <Typography variant="subtitle1" color="text.secondary" component="div">
-                        {card.props.subtitle}
-                      </Typography>
-                    </CardContent>
-                  </Card>
+      <Grid item xs={12} sm={6} md={4} lg={3}>
+        <Card sx={{ maxWidth: 345 }} >
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              height="140"
+              width="140"
+              image={card.props.image}
+              alt={card.props.title}
+            />
+            <CardContent>
+              <Typography gutterBottom component="div" variant="h5">
+                {card.props.title}
+              </Typography>
+              <Typography variant="subtitle1" color="text.secondary" component="div">
+                {card.props.subtitle}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Grid>
     );
 }

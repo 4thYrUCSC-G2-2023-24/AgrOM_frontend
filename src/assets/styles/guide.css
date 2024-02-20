@@ -1,0 +1,28 @@
+.guideLayout {
+    height: 100%;
+    overflow-y: hidden;
+    width: 90%;
+    text-align: center;
+}
+
+.guideSearch {
+    width:40%;
+    align-self: center;
+    padding : 5px;
+    margin-bottom: 20px;
+}
+
+.guideCard {
+    margin-bottom: 10px;
+    border-radius: 20px;
+    background-color: #ffffff;
+    /* text-align: left; */
+    /* height: 220px; */
+}
+
+@media screen and (max-width: 480px){
+    .guideSearch {
+        width: 90%;
+    }
+
+}

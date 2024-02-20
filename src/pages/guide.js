@@ -1,7 +1,9 @@
-import { Container } from "@material-ui/core";
+import { Container, Grid } from "@material-ui/core";
 import { GuideCard } from "../components/guide/guideCard";
 import { cardData } from "../constants/guideCard";
 import { useState } from "react";
+
+import './../assets/styles/guide.css';
 
 export const Guide = ()=>{
 
@@ -14,14 +16,16 @@ export const Guide = ()=>{
     }
 
     return (
-        <div style={{ height: '100%', overflowY: 'hidden', width: '90%', textAlign:"center" }}>
-                <textarea onChange={handleSearchChange} style={{width:"40%", alignSelf: "center", padding: "5px", marginBottom: "20px"}}/>
-              <Container>
-                {console.log(cardData)}
-                {cardData.map((card) => (
-                    card.title.toLowerCase().includes(searchval.toLowerCase()) && <GuideCard props={card} />
-                ))}
-              </Container>
-            </div>
+      <div className="guideLayout">
+        <textarea className="guideSearch" onChange={handleSearchChange} />
+        <div className="guideCardContainer" >
+          <Grid container spacing={2}>
+            {console.log(cardData)}
+            {cardData.map((card) => (
+              card.title.toLowerCase().includes(searchval.toLowerCase()) && <GuideCard props={card} />
+            ))}
+          </Grid>
+        </div>
+      </div>
     );
 }
