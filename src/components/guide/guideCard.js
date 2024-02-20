@@ -1,21 +1,30 @@
-import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from "@material-ui/core";
+import { Card, CardActionArea, CardContent, CardMedia, Grid, Modal, Typography } from "@material-ui/core";
 import './../../assets/styles/guide.css';
+import { useState } from "react";
 
 export const GuideCard = (props)=>{
 
     const card = props;
-    
-    console.log(card)
+    const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageClick = async (imageUrl) => {
+    setSelectedImage(imageUrl);
+  };
+
+  const handleCloseModal = async () => {
+    setSelectedImage(null);
+  };
 
     return (
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <Card sx={{ maxWidth: 345 }} >
+      <Grid item xs={12} sm={6} md={4} >
+        <Card sx={{ maxWidth: 345 }} style={{ border: '1px solid #ccc' }} >
           <CardActionArea>
             <CardMedia
               component="img"
               height="140"
               width="140"
               image={card.props.image}
+              onClick={e => handleImageClick(card.props.image)}
               alt={card.props.title}
             />
             <CardContent>
@@ -28,6 +37,12 @@ export const GuideCard = (props)=>{
             </CardContent>
           </CardActionArea>
         </Card>
+        
+        <Modal open={!!selectedImage} onClose={handleCloseModal}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+          <img src={selectedImage} alt="Zoomed Image" style={{ maxWidth: '90%', maxHeight: '90%' }} onClick={handleCloseModal} />
+        </div>
+      </Modal>
       </Grid>
     );
 }

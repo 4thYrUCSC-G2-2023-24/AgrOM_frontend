@@ -1,4 +1,4 @@
-import { Container, Grid } from "@material-ui/core";
+import { Container, Grid, Modal } from "@material-ui/core";
 import { GuideCard } from "../components/guide/guideCard";
 import { cardData } from "../constants/guideCard";
 import { useState } from "react";
@@ -7,8 +7,7 @@ import './../assets/styles/guide.css';
 
 export const Guide = ()=>{
 
-    const [searchval, Setsearchval] = useState("");
-    console.log(searchval);
+  const [searchval, Setsearchval] = useState("");
 
     const handleSearchChange = e => {
         Setsearchval(e.target.value);
@@ -17,9 +16,9 @@ export const Guide = ()=>{
 
     return (
       <div className="guideLayout">
-        <textarea className="guideSearch" onChange={handleSearchChange} />
-        <div className="guideCardContainer" >
-          <Grid container spacing={2}>
+        <textarea className="guideSearch" placeholder="Type to search" onChange={handleSearchChange} />
+        <div className="guideCardContainer" style={{ overflow: 'hidden' }} >
+          <Grid container spacing={2} >
             {console.log(cardData)}
             {cardData.map((card) => (
               card.title.toLowerCase().includes(searchval.toLowerCase()) && <GuideCard props={card} />
