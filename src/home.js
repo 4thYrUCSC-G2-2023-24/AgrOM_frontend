@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import { Tabs, Tab } from '@material-ui/core';
+import { Tabs, Tab, Stepper, Step, StepLabel, IconButton, Drawer, List, ListItem, ListItemText, useMediaQuery, useTheme } from '@material-ui/core';
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -12,24 +12,28 @@ import CardContent from "@material-ui/core/CardContent";
 import { Paper, CardActionArea, CardMedia, Grid, TableContainer, Table, TableBody, TableHead, TableRow, TableCell, Button, CircularProgress } from "@material-ui/core";
 import logo from "./logo.png";
 import image from "./bg2.jpg";
-import ooze from "./ooze.png";
-import halo from './halo.png';
-import cross from './cross_section.png'
-import rings from './rings.jpg'
-import stem_ring from './stem_rings.PNG'
-import lesion from './Lesion.PNG'
-import spot from './Spots.PNG'
-import fungus from './Fungus.png'
+import image2 from "./tomato-bg.JPG";
+// import ooze from "./ooze.png";
+// import halo from './halo.png';
+// import cross from './cross_section.png'
+// import rings from './rings.jpg'
+// import stem_ring from './stem_rings.PNG'
+// import lesion from './Lesion.PNG'
+// import spot from './Spots.PNG'
+// import fungus from './Fungus.png'
 import { DropzoneArea } from 'material-ui-dropzone';
 import { common } from '@material-ui/core/colors';
 import Clear from '@material-ui/icons/Clear';
 import Select from 'react-select';
 import Box from '@material-ui/core/Box';
 
+import {options, leaf_symptom_color_option, fruit_symptom_options, fruit_symptom_color_options, stem_symptom_options, stem_symptom_color_options, fungus_symptom_options, fungus_symptom_color_options, wilting_options, leaf_halo_options, leaf_halo_color_options, fruit_halo_options, fruit_halo_color_options, bad_odor_symptom_options, ooze_liquid_symptom_options, cross_section_of_stem_symptom_options, curling_symptom_options } from "./constants/symptomOptions";
+import { Guide } from "./pages/guide";
+import Questions from "./questions";
 
-
-
-
+import { containerStyles, containerStyles2, labelStyles, buttonStyles } from "./assets/styles/home";
+import { PredictOption } from "./pages/predictOption";
+import HomePage from "./pages/homePage";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -40,9 +44,13 @@ const ColorButton = withStyles((theme) => ({
     },
   },
 }))(Button);
+
 const axios = require("axios").default;
 
 const useStyles = makeStyles((theme) => ({
+  title:{
+    fontFamily: "Montserrat"
+  },
   grow: {
     flexGrow: 1,
   },
@@ -68,15 +76,18 @@ const useStyles = makeStyles((theme) => ({
   },
   gridContainer: {
     justifyContent: "center",
-    padding: "4em 1em 0 1em",
+    padding: "3em 3em 0 3em",
   },
   mainContainer: {
-    backgroundImage: `url(${image})`,
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
-    height: "150vh",
+    // backgroundImage: `url(${image})`,
+    // backgroundImage: `url(${image2})`,
+    // backgroundRepeat: 'no-repeat',
+    // backgroundPosition: 'center',
+    // backgroundSize: 'cover',
+    backgroundColor: 'white',
+    height: "100%",
     marginTop: "8px",
+    fontFamily: "verdana"
   },
   imageCard: {
     margin: "auto",
@@ -100,38 +111,6 @@ const useStyles = makeStyles((theme) => ({
   uploadIcon: {
     background: 'white',
   },
-  tableContainer: {
-    backgroundColor: 'transparent !important',
-    boxShadow: 'none !important',
-  },
-  table: {
-    backgroundColor: 'transparent !important',
-  },
-  tableHead: {
-    backgroundColor: 'transparent !important',
-  },
-  tableRow: {
-    backgroundColor: 'transparent !important',
-  },
-  tableCell: {
-    fontSize: '22px',
-    backgroundColor: 'transparent !important',
-    borderColor: 'transparent !important',
-    color: '#000000a6 !important',
-    fontWeight: 'bolder',
-    padding: '1px 24px 1px 16px',
-  },
-  tableCell1: {
-    fontSize: '14px',
-    backgroundColor: 'transparent !important',
-    borderColor: 'transparent !important',
-    color: '#000000a6 !important',
-    fontWeight: 'bolder',
-    padding: '1px 24px 1px 16px',
-  },
-  tableBody: {
-    backgroundColor: 'transparent !important',
-  },
   text: {
     color: 'white !important',
     textAlign: 'center',
@@ -148,10 +127,28 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   appbar: {
-    background: '#008000',
+    background: '#193a1e',
     boxShadow: 'none',
-    color: 'white'
+    color: 'white',
   },
+  footer: {
+    backgroundColor: '#193a1e',
+    marginTop: 'auto',
+    // backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(6),
+  },
+  stepper: {
+    background: 'transparent',
+  },
+  step: {
+    '& .MuiStepIcon-active': {
+      color: 'green', // Change the color of the step icons to green
+    },
+    '& .MuiStepIcon-completed': {
+      color: 'green', // Change the color of the step icons to green
+    },
+  },
+
   loader: {
     color: '#be6a77 !important',
   },
@@ -174,10 +171,26 @@ export const ImageUpload = () => {
   const [possibleDiseases, setPossibleDiseases] = useState();
   const [selectedTab, setSelectedTab] = React.useState(0);
 
+  const [predictOption, setPredictOption] = useState(0);
+  const [predictStep, setPredictStep] = useState(0);
+
+  const handlePredictOption = async (stepOption) => {
+    setPredictOption(stepOption);
+    if(stepOption === 1){
+      handlePredictStep(1);
+    }
+    else{
+      handlePredictStep(0);
+    }
+  }
+
+  const handlePredictStep = async (step) => {
+    setPredictStep(step);
+  }
+
   let confidence = 0;
 
   const sendFile = async (sympom_set) => {
-
 
     let ress = await axios({
       method: "post",
@@ -186,8 +199,6 @@ export const ImageUpload = () => {
         "Content-type": "application/json"
       },
       data: sympom_set,
-
-
     });
 
     if (ress.status === 200) {
@@ -205,7 +216,6 @@ export const ImageUpload = () => {
         if (res.status === 200) {
           console.log(res.data)
           setDisease(res.data.disease)
-
         }
 
       } else {
@@ -217,7 +227,6 @@ export const ImageUpload = () => {
         if (res.status === 200) {
           console.log(res.data)
           setPossibleDiseases(res.data.disease)
-
         }
 
       }
@@ -244,17 +253,6 @@ export const ImageUpload = () => {
 
   }
 
-  const cardData = [
-    { id: 1, image: rings, title: 'Concenric Rings on Leafs', subtitle: 'Description of Concentric Rings' },
-    { id: 2, image: stem_ring, title: 'Concentric Rings on stem', subtitle: 'Description of Concentric rings on stem' },
-    { id: 3, image: lesion, title: 'Lesions on the leaf', subtitle: 'Description of Lesion' },
-    { id: 4, image: spot, title: 'Spots on the leaf', subtitle: 'Description of Spot' },
-    { id: 5, image: fungus, title: 'White Fungus symptom', subtitle: 'Description of Fungus symptom' },
-    { id: 6, image: halo, title: 'Fruit Halo', subtitle: 'Description of Halo' },
-    { id: 7, image: ooze, title: 'Ooze Liquid', subtitle: 'Description of Ooze Liquid' },
-    { id: 8, image: cross, title: 'Cross section of stem symptom', subtitle: 'Description of cross section stem symptoms' },
-  ];
-
   const clearData = () => {
     setData(null);
     setImage(false);
@@ -265,7 +263,11 @@ export const ImageUpload = () => {
 
   };
 
-
+  const steps = [
+    'Insert Tomato Leaf image',
+    'Answer questions on extra symptoms',
+    'Get your result',
+  ];
 
   useEffect(() => {
     if (!selectedFile) {
@@ -304,119 +306,6 @@ export const ImageUpload = () => {
     confidence = (parseFloat(data.confidence) * 100).toFixed(2);
   }
 
-  const options = [
-    { value: 'lesions', label: 'Lesions' },
-    { value: 'spots', label: 'Spots' },
-    { value: 'yellowing', label: 'Yellowing' },
-    { value: 'rings', label: 'Concentric Rings' }
-  ]
-
-  const leaf_symptom_color_option = [
-    { value: 'brown', label: 'Brown' },
-    { value: 'black', label: 'Black' },
-    { value: 'yellow', label: 'Yellow' },
-  ]
-
-  const fruit_symptom_options = [
-    { value: 'lesions', label: 'Lesions' },
-    { value: 'spots', label: 'Spots' },
-    { value: 'yellowing', label: 'Yellowing' },
-    { value: 'rings', label: 'Concentric Rings' }
-  ]
-
-  const fruit_symptom_color_options = [
-    { value: 'brown', label: 'Brown' },
-    { value: 'black', label: 'Black' },
-    { value: 'yellow', label: 'Yellow' },
-  ]
-
-  const stem_symptom_options = [
-    { value: 'lesions', label: 'Lesions' },
-    { value: 'spots', label: 'Spots' },
-    { value: 'yellowing', label: 'Yellowing' },
-    { value: 'rings', label: 'Concentric Rings' }
-  ]
-
-  const stem_symptom_color_options = [
-    { value: 'lesions', label: 'Lesions' },
-    { value: 'spots', label: 'Spots' },
-    { value: 'yellowing', label: 'Yellowing' },
-    { value: 'rings', label: 'Concentric Rings' }
-  ]
-
-  const fungus_symptom_options = [
-    { value: 'lesions', label: 'Lesions' },
-    { value: 'spots', label: 'Spots' },
-    { value: 'yellowing', label: 'Yellowing' },
-    { value: 'rings', label: 'Concentric Rings' }
-  ]
-
-  const fungus_symptom_color_options = [
-    { value: 'lesions', label: 'Lesions' },
-    { value: 'spots', label: 'Spots' },
-    { value: 'yellowing', label: 'Yellowing' },
-    { value: 'rings', label: 'Concentric Rings' }
-  ]
-
-
-  const wilting_options = [
-    { value: 'Yes', label: 'Yes' },
-    { value: 'No', label: 'No' },
-
-  ]
-
-
-  const leaf_halo_options = [
-    { value: 'Yes', label: 'Yes' },
-    { value: 'No', label: 'No' },
-
-  ]
-
-  const leaf_halo_color_options = [
-    { value: 'brown', label: 'Brown' },
-    { value: 'black', label: 'Black' },
-    { value: 'yellow', label: 'Yellow' },
-  ]
-
-  const fruit_halo_options = [
-    { value: 'Yes', label: 'Yes' },
-    { value: 'No', label: 'No' },
-  ]
-
-  const fruit_halo_color_options = [
-    { value: 'brown', label: 'Brown' },
-    { value: 'black', label: 'Black' },
-    { value: 'yellow', label: 'Yellow' },
-  ]
-
-  const bad_odor_symptom_options = [
-    { value: 'lesions', label: 'Lesions' },
-    { value: 'spots', label: 'Spots' },
-  ]
-
-  const ooze_liquid_symptom_options = [
-    { value: 'Yes', label: 'Yes' },
-    { value: 'No', label: 'No' },
-  ]
-
-  const cross_section_of_stem_symptom_options = [
-    { value: 'Yes', label: 'Yes' },
-    { value: 'No', label: 'No' },
-  ]
-
-  const curling_symptom_options = [
-    { value: 'Yes', label: 'Yes' },
-    { value: 'No', label: 'No' },
-  ]
-
-
-
-
-
-
-
-
-
   const customStyles = {
     control: (base) => ({
       ...base,
@@ -430,42 +319,6 @@ export const ImageUpload = () => {
       transform: 'translateX(-50%)',
       width: '400px',
     }),
-  };
-
-  // const containerStyles = {
-  //   marginTop: '10px',
-  //   display: 'flex',
-  //   flexDirection: 'column',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // };
-
-  const containerStyles = {
-    marginTop: '10px',
-    display: 'flex',
-    justifyContent: 'space-around',
-  };
-
-  const labelStyles = {
-    color: 'white', // Change 'red' to the color you desire
-    marginBottom: '10px', // Add margin-bottom for spacing
-  };
-
-  const buttonStyles = {
-    backgroundColor: 'green',
-    color: 'white',
-    border: 'none',
-    padding: '10px 20px',
-    cursor: 'pointer',
-    borderRadius: '10px',
-
-  };
-
-  const containerStyles2 = {
-    marginTop: '20px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
   };
 
   const handleSubmit = () => {
@@ -571,28 +424,27 @@ export const ImageUpload = () => {
 
   };
 
-
-
   return (
     <React.Fragment>
       <AppBar position="static" className={classes.appbar}>
         <Toolbar>
-          <Typography className={classes.title} variant="h6" noWrap>
-            AgrOM : Hybrid Tomato Plant Disease Detection System
+          <Typography className={classes.title} variant="h6" noWrap href = "#" sx={{flexGrow: 1 }}>
+            AgrOM : A Hybrid System
           </Typography>
           <div className={classes.grow} />
-          <Tabs value={selectedTab} onChange={handleTabChange}>
+            <Tabs value={selectedTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
             <Tab label="Home" />
+            <Tab label="Predict" />
             <Tab label="Guide" />
-            <Tab label="Logout" />
-
-
+            <Tab label="Questions" />
             {/* Add more tabs as needed */}
           </Tabs>
           <Avatar src={logo} className={classes.logo}></Avatar>
         </Toolbar>
       </AppBar>
-      <Container maxWidth={false} className={classes.mainContainer} disableGutters={true}>
+      { selectedTab === 0 && <HomePage changeSelectTab={setSelectedTab} />}
+      { selectedTab !== 0 && 
+      <Container maxWidth={false} className={classes.mainContainer} disableGutters={true}>        
         <Grid
           className={classes.gridContainer}
           container
@@ -601,14 +453,41 @@ export const ImageUpload = () => {
           alignItems="center"
           spacing={2}
         >
-          {selectedTab === 0 && <Grid item xs={12}>
-            <Card className={`${classes.imageCard} ${!image ? classes.imageCardEmpty : ''}`}>
+
+          { selectedTab === 1 && predictOption === 0 && 
+            <PredictOption predictOption={predictOption} onOptionChange={handlePredictOption} onStepChange={handlePredictStep }/>
+          }
+
+          { selectedTab === 1 && predictOption === 2 && 
+            <PredictOption predictOption={predictOption} onOptionChange={handlePredictOption} />
+          }
+
+          {selectedTab === 1 && predictOption === 1 && predictStep === 1 && <Grid item xs={12}>
+            <Grid container xs={12} style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '5px'}}>
+              <ColorButton variant="contained" color="primary" component="div" onClick={(e)=>{setPredictOption(0)}} >
+                Go Back
+              </ColorButton>
+
+            <div style={containerStyles2}>
+              <button onClick={e => handlePredictStep(2)} style={buttonStyles}>Submit</button>
+            </div>
+            </Grid>
+              <Box style={{backgroundColor: 'white', maxWidth: '100%', padding: '5px', marginBottom: '40px'}}>
+                <Stepper activeStep={0} alternativeLabel className={classes.stepper}>
+                  {steps.map((label) => (
+                    <Step key={label} >
+                      <StepLabel className={classes.step}>{label}</StepLabel>
+                    </Step>
+                  ))}
+                </Stepper>
+
+              <Card className={`${classes.imageCard} ${!image ? classes.imageCardEmpty : ''}`} style={{height:"350px"}}>
               {image && <CardActionArea>
                 <CardMedia
                   className={classes.media}
                   image={preview}
                   component="image"
-                  title="Contemplative Reptile"
+                  title="Leaf symptom"
                 />
               </CardActionArea>
               }
@@ -619,40 +498,42 @@ export const ImageUpload = () => {
                   onChange={onSelectFile}
                 />
               </CardContent>}
-              {/* {data && <CardContent className={classes.detail}>
-                <TableContainer component={Paper} className={classes.tableContainer}>
-                  <Table className={classes.table} size="small" aria-label="simple table">
-                    <TableHead className={classes.tableHead}>
-                      <TableRow className={classes.tableRow}>
-                        <TableCell className={classes.tableCell1}>Label:</TableCell>
-                        <TableCell align="right" className={classes.tableCell1}>Confidence:</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody className={classes.tableBody}>
-                      <TableRow className={classes.tableRow}>
-                        <TableCell component="th" scope="row" className={classes.tableCell}>
-                          {data.class}
-                        </TableCell>
-                        <TableCell align="right" className={classes.tableCell}>{confidence}%</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </CardContent>} */}
-              {/* {isLoading && <CardContent className={classes.detail}>
-                <CircularProgress color="secondary" className={classes.loader} />
-                <Typography className={classes.title} variant="h6" noWrap>
-                  Processing
-                </Typography>
-              </CardContent>} */}
             </Card>
-            {/* <div style={containerStyles}>
-              <label htmlFor="selectField">Select Field:</label>
-              <Select
-                styles={customStyles}
-                options={options}
-              />
-            </div> */}
+            </Box>
+
+          </Grid>}
+          
+          {selectedTab === 1 && predictOption === 1 && predictStep === 2 &&  <Grid item xs={12}>
+              <ColorButton variant="contained" color="primary" component="div" onClick={(e)=>{setPredictOption(0)}} >
+                Go Back
+              </ColorButton>
+              
+                <Stepper activeStep={1} alternativeLabel className={classes.stepper}>
+                  {steps.map((label) => (
+                    <Step key={label} >
+                      <StepLabel className={classes.step}>{label}</StepLabel>
+                    </Step>
+                  ))}
+                </Stepper>
+
+              <Card className={`${classes.imageCard} ${!image ? classes.imageCardEmpty : ''}`} style={{height:"350px"}}>
+              {image && <CardActionArea>
+                <CardMedia
+                  className={classes.media}
+                  image={preview}
+                  component="image"
+                  title="Leaf symptom"
+                />
+              </CardActionArea>
+              }
+              {!image && <CardContent className={classes.content}>
+                <DropzoneArea
+                  acceptedFiles={['image/*']}
+                  dropzoneText={"Drag and drop an image of a tomato plant leaf to process"}
+                  onChange={onSelectFile}
+                />
+              </CardContent>}
+            </Card>
 
             <div style={containerStyles}>
               <div>
@@ -838,17 +719,13 @@ export const ImageUpload = () => {
               </div>
             </div>
 
-
             <div style={containerStyles2}>
               <button onClick={handleSubmit} style={buttonStyles}>Submit</button>
             </div>
 
-
-
-
-
           </Grid>}
-          {data && selectedTab === 0 &&
+
+          {data && selectedTab === 1 &&
             <Grid item className={classes.buttonGrid} >
 
               <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
@@ -856,7 +733,7 @@ export const ImageUpload = () => {
               </ColorButton>
             </Grid>}
 
-          {disease && selectedTab === 0 &&
+          {disease && selectedTab === 1 &&
             <Grid item className={classes.buttonGrid} >
 
               <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
@@ -864,7 +741,7 @@ export const ImageUpload = () => {
               </ColorButton>
             </Grid>}
 
-          {possibleDiseases && selectedTab === 0 &&
+          {possibleDiseases && selectedTab === 1 &&
             <Grid item className={classes.buttonGrid} >
 
               <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
@@ -877,36 +754,21 @@ export const ImageUpload = () => {
               </ColorButton>
             </Grid>}
 
-          {selectedTab === 1 &&
-            <div style={{ height: '1000px', overflowY: 'scroll', width: '100%' }}>
-              <Container>
-                {cardData.map((card) => (
-                  <Card style={{ display: 'flex', marginBottom: '10px', borderRadius: '8px', backgroundColor: '#f0f0f0', height: '200px' }}>
-                    <CardMedia
-                      component="img"
-                      style={{ width: '25%', height: '200px' }} // Image takes up 25% (one quarter) of the card
-                      image={card.image}
-                      alt="Live from space album cover"
-                    />
-                    <CardContent style={{ flex: '1' }}>
-                      <Typography component="div" variant="h5">
-                        {card.title}
-                      </Typography>
-                      <Typography variant="subtitle1" color="text.secondary" component="div">
-                        {card.subtitle}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                ))}
-              </Container>
-            </div>
-          }
+          {selectedTab === 2 && <Guide />}
 
-
-
+          {selectedTab === 3 && <Questions />}
 
         </Grid >
       </Container >
+      }
+      <footer className={classes.footer}>
+        <Typography variant="h6" align="center" gutterBottom>
+          Website Footer
+        </Typography>
+        <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </Typography>
+      </footer>
     </React.Fragment >
   );
 };
