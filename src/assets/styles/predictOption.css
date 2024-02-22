@@ -1,10 +1,10 @@
-.layoutDiv  {
+.layoutDiv {
     height: 70vh;
-    margin-bottom : 60px; 
-    overflow-y: hidden; 
-    width: 90%; 
-    text-align: center; 
-    background-color: white; 
+    margin-bottom: 60px;
+    overflow-y: hidden;
+    width: 90%;
+    text-align: center;
+    background-color: white;
 }
 
 .layoutTitle {
@@ -12,7 +12,7 @@
     height: 5vh;
     padding: 10px;
     text-align: left;
-    font-family: georgia;
+    font-family: Poppins;
     font-size: 25px;
 }
 
@@ -32,7 +32,7 @@
     border-radius: 30px;
 }
 
-@media screen and (max-width: 480px){
+@media screen and (max-width: 480px) {
     .buttonBox {
         flex-direction: column;
     }

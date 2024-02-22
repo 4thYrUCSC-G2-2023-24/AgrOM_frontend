@@ -27,7 +27,7 @@ import Clear from '@material-ui/icons/Clear';
 import Select from 'react-select';
 import Box from '@material-ui/core/Box';
 
-import {options, leaf_symptom_color_option, fruit_symptom_options, fruit_symptom_color_options, stem_symptom_options, stem_symptom_color_options, fungus_symptom_options, fungus_symptom_color_options, wilting_options, leaf_halo_options, leaf_halo_color_options, fruit_halo_options, fruit_halo_color_options, bad_odor_symptom_options, ooze_liquid_symptom_options, cross_section_of_stem_symptom_options, curling_symptom_options } from "./constants/symptomOptions";
+import { options, leaf_symptom_color_option, fruit_symptom_options, fruit_symptom_color_options, stem_symptom_options, stem_symptom_color_options, fungus_symptom_options, fungus_symptom_color_options, wilting_options, leaf_halo_options, leaf_halo_color_options, fruit_halo_options, fruit_halo_color_options, bad_odor_symptom_options, ooze_liquid_symptom_options, cross_section_of_stem_symptom_options, curling_symptom_options } from "./constants/symptomOptions";
 import { Guide } from "./pages/guide";
 import Questions from "./questions";
 
@@ -48,8 +48,8 @@ const ColorButton = withStyles((theme) => ({
 const axios = require("axios").default;
 
 const useStyles = makeStyles((theme) => ({
-  title:{
-    fontFamily: "Montserrat"
+  title: {
+    fontFamily: "Poppins"
   },
   grow: {
     flexGrow: 1,
@@ -176,10 +176,10 @@ export const ImageUpload = () => {
 
   const handlePredictOption = async (stepOption) => {
     setPredictOption(stepOption);
-    if(stepOption === 1){
+    if (stepOption === 1) {
       handlePredictStep(1);
     }
-    else{
+    else {
       handlePredictStep(0);
     }
   }
@@ -428,11 +428,11 @@ export const ImageUpload = () => {
     <React.Fragment>
       <AppBar position="static" className={classes.appbar}>
         <Toolbar>
-          <Typography className={classes.title} variant="h6" noWrap href = "#" sx={{flexGrow: 1 }}>
+          <Typography className={classes.title} variant="h6" noWrap href="#" sx={{ flexGrow: 1 }}>
             AgrOM : A Hybrid System
           </Typography>
           <div className={classes.grow} />
-            <Tabs value={selectedTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
+          <Tabs value={selectedTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
             <Tab label="Home" />
             <Tab label="Predict" />
             <Tab label="Guide" />
@@ -442,37 +442,37 @@ export const ImageUpload = () => {
           <Avatar src={logo} className={classes.logo}></Avatar>
         </Toolbar>
       </AppBar>
-      { selectedTab === 0 && <HomePage changeSelectTab={setSelectedTab} />}
-      { selectedTab !== 0 && 
-      <Container maxWidth={false} className={classes.mainContainer} disableGutters={true}>        
-        <Grid
-          className={classes.gridContainer}
-          container
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={2}
-        >
+      {selectedTab === 0 && <HomePage changeSelectTab={setSelectedTab} />}
+      {selectedTab !== 0 &&
+        <Container maxWidth={false} className={classes.mainContainer} disableGutters={true}>
+          <Grid
+            className={classes.gridContainer}
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+          >
 
-          { selectedTab === 1 && predictOption === 0 && 
-            <PredictOption predictOption={predictOption} onOptionChange={handlePredictOption} onStepChange={handlePredictStep }/>
-          }
+            {selectedTab === 1 && predictOption === 0 &&
+              <PredictOption predictOption={predictOption} onOptionChange={handlePredictOption} onStepChange={handlePredictStep} />
+            }
 
-          { selectedTab === 1 && predictOption === 2 && 
-            <PredictOption predictOption={predictOption} onOptionChange={handlePredictOption} />
-          }
+            {selectedTab === 1 && predictOption === 2 &&
+              <PredictOption predictOption={predictOption} onOptionChange={handlePredictOption} />
+            }
 
-          {selectedTab === 1 && predictOption === 1 && predictStep === 1 && <Grid item xs={12}>
-            <Grid container xs={12} style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '5px'}}>
-              <ColorButton variant="contained" color="primary" component="div" onClick={(e)=>{setPredictOption(0)}} >
-                Go Back
-              </ColorButton>
+            {selectedTab === 1 && predictOption === 1 && predictStep === 1 && <Grid item xs={12}>
+              <Grid container xs={12} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '5px' }}>
+                <ColorButton variant="contained" color="primary" component="div" onClick={(e) => { setPredictOption(0) }} >
+                  Go Back
+                </ColorButton>
 
-            <div style={containerStyles2}>
-              <button onClick={e => handlePredictStep(2)} style={buttonStyles}>Submit</button>
-            </div>
-            </Grid>
-              <Box style={{backgroundColor: 'white', maxWidth: '100%', padding: '5px', marginBottom: '40px'}}>
+                <div style={containerStyles2}>
+                  <button onClick={e => handlePredictStep(2)} style={buttonStyles}>Submit</button>
+                </div>
+              </Grid>
+              <Box style={{ backgroundColor: 'white', maxWidth: '100%', padding: '5px', marginBottom: '40px' }}>
                 <Stepper activeStep={0} alternativeLabel className={classes.stepper}>
                   {steps.map((label) => (
                     <Step key={label} >
@@ -481,285 +481,285 @@ export const ImageUpload = () => {
                   ))}
                 </Stepper>
 
-              <Card className={`${classes.imageCard} ${!image ? classes.imageCardEmpty : ''}`} style={{height:"350px"}}>
-              {image && <CardActionArea>
-                <CardMedia
-                  className={classes.media}
-                  image={preview}
-                  component="image"
-                  title="Leaf symptom"
-                />
-              </CardActionArea>
-              }
-              {!image && <CardContent className={classes.content}>
-                <DropzoneArea
-                  acceptedFiles={['image/*']}
-                  dropzoneText={"Drag and drop an image of a tomato plant leaf to process"}
-                  onChange={onSelectFile}
-                />
-              </CardContent>}
-            </Card>
-            </Box>
+                <Card className={`${classes.imageCard} ${!image ? classes.imageCardEmpty : ''}`} style={{ height: "350px" }}>
+                  {image && <CardActionArea>
+                    <CardMedia
+                      className={classes.media}
+                      image={preview}
+                      component="image"
+                      title="Leaf symptom"
+                    />
+                  </CardActionArea>
+                  }
+                  {!image && <CardContent className={classes.content}>
+                    <DropzoneArea
+                      acceptedFiles={['image/*']}
+                      dropzoneText={"Drag and drop an image of a tomato plant leaf to process"}
+                      onChange={onSelectFile}
+                    />
+                  </CardContent>}
+                </Card>
+              </Box>
 
-          </Grid>}
-          
-          {selectedTab === 1 && predictOption === 1 && predictStep === 2 &&  <Grid item xs={12}>
-              <ColorButton variant="contained" color="primary" component="div" onClick={(e)=>{setPredictOption(0)}} >
+            </Grid>}
+
+            {selectedTab === 1 && predictOption === 1 && predictStep === 2 && <Grid item xs={12}>
+              <ColorButton variant="contained" color="primary" component="div" onClick={(e) => { setPredictOption(0) }} >
                 Go Back
               </ColorButton>
-              
-                <Stepper activeStep={1} alternativeLabel className={classes.stepper}>
-                  {steps.map((label) => (
-                    <Step key={label} >
-                      <StepLabel className={classes.step}>{label}</StepLabel>
-                    </Step>
-                  ))}
-                </Stepper>
 
-              <Card className={`${classes.imageCard} ${!image ? classes.imageCardEmpty : ''}`} style={{height:"350px"}}>
-              {image && <CardActionArea>
-                <CardMedia
-                  className={classes.media}
-                  image={preview}
-                  component="image"
-                  title="Leaf symptom"
-                />
-              </CardActionArea>
-              }
-              {!image && <CardContent className={classes.content}>
-                <DropzoneArea
-                  acceptedFiles={['image/*']}
-                  dropzoneText={"Drag and drop an image of a tomato plant leaf to process"}
-                  onChange={onSelectFile}
-                />
-              </CardContent>}
-            </Card>
-
-            <div style={containerStyles}>
-              <div>
-                <label htmlFor="selectField1" style={labelStyles}>Leaf Symptom: </label>
-                <Select
-                  value={selectedLeafSymptomOption}
-                  options={options}
-                  styles={customStyles}
-                  onChange={(selectedLeafSymptomOption) => handleChange(selectedLeafSymptomOption, 'select1')}
-                  isClearable={true}
-
-                // other props and styles for the Select component
-                />
-              </div>
-              <div>
-                <label htmlFor="selectField2" style={labelStyles}>Leaf Symptom Color:</label>
-                <Select
-                  options={leaf_symptom_color_option}
-                  styles={customStyles}
-                  value={selectedLeafColorSymptomOption}
-                  onChange={(selectedLeafColorSymptomOption) => handleChange(selectedLeafColorSymptomOption, 'select2')}
-                  isClearable={true}
-
-                // other props and styles for the Select component
-                />
-              </div>
-              <div>
-                <label htmlFor="selectField3" style={labelStyles}>Fruit Symptom:</label>
-                <Select
-                  options={fruit_symptom_options}
-                  styles={customStyles}
-                  value={selectedFruitSymptomOption}
-                  onChange={(selectedFruitSymptomOption) => handleChange(selectedFruitSymptomOption, 'select3')}
-                  isClearable={true}
-
-                // other props and styles for the Select component
-                />
-              </div>
-            </div>
-
-            <div style={containerStyles}>
-              <div>
-                <label htmlFor="selectField1" style={labelStyles}>Fruit Symptom Color:</label>
-                <Select
-                  options={fruit_symptom_color_options}
-                  styles={customStyles}
-                  value={selectedFruitColorSymptomOption}
-                  onChange={(selectedFruitColorSymptomOption) => handleChange(selectedFruitColorSymptomOption, 'select4')}
-                  isClearable={true}
-
-                // other props and styles for the Select component
-                />
-              </div>
-              <div>
-                <label htmlFor="selectField2" style={labelStyles}>Stem Symptom:</label>
-                <Select
-                  options={stem_symptom_options}
-                  styles={customStyles}
-                  value={selectedStemSymptomOption}
-                  onChange={(selectedStemSymptomOption) => handleChange(selectedStemSymptomOption, 'select5')}
-                  isClearable={true}
-                // other props and styles for the Select component
-                />
-              </div>
-              <div>
-                <label htmlFor="selectField3" style={labelStyles}>Stem Symptom Color:</label>
-                <Select
-                  options={stem_symptom_color_options}
-                  styles={customStyles}
-                  value={selectedStemColorSymptomOption}
-                  onChange={(selectedStemColorSymptomOption) => handleChange(selectedStemColorSymptomOption, 'select6')}
-                  isClearable={true}
-                // other props and styles for the Select component
-                />
-              </div>
-            </div>
-
-            <div style={containerStyles}>
-              <div>
-                <label htmlFor="selectField1" style={labelStyles}>Fungus Symptom:</label>
-                <Select
-                  options={fungus_symptom_options}
-                  styles={customStyles}
-                  value={selectedFungusSymptomOption}
-                  onChange={(selectedFungusSymptomOption) => handleChange(selectedFungusSymptomOption, 'select7')}
-                  isClearable={true}
-                // other props and styles for the Select component
-                />
-              </div>
-              <div>
-                <label htmlFor="selectField2" style={labelStyles}>Fungus Symptom Color:</label>
-                <Select
-                  options={fungus_symptom_color_options}
-                  styles={customStyles}
-                  value={selectedFungusColorSymptomOption}
-                  onChange={(selectedFungusColorSymptomOption) => handleChange(selectedFungusColorSymptomOption, 'select8')}
-                  isClearable={true}
-                // other props and styles for the Select component
-                />
-              </div>
-              <div>
-                <label htmlFor="selectField3" style={labelStyles}>Fruit Halo:</label>
-                <Select
-                  options={fruit_halo_options}
-                  styles={customStyles}
-                  value={selectedFruitHaloSymptomOption}
-                  onChange={(selectedFruitHaloSymptomOption) => handleChange(selectedFruitHaloSymptomOption, 'select9')}
-                  isClearable={true}
-                // other props and styles for the Select component
-                />
-              </div>
-            </div>
-
-            <div style={containerStyles}>
-              <div>
-                <label htmlFor="selectField1" style={labelStyles}>Leaf Halo:</label>
-                <Select
-                  options={leaf_halo_options}
-                  styles={customStyles}
-                  value={selectedLeafHaloSymptomOption}
-                  onChange={(selectedLeafHaloSymptomOption) => handleChange(selectedLeafHaloSymptomOption, 'select10')}
-                  isClearable={true}
-                // other props and styles for the Select component
-                />
-              </div>
-              <div>
-                <label htmlFor="selectField2" style={labelStyles}>Wilting:</label>
-                <Select
-                  options={wilting_options}
-                  styles={customStyles}
-                  value={selectedWiltingSymptomOption}
-                  onChange={(selectedWiltingSymptomOption) => handleChange(selectedWiltingSymptomOption, 'select11')}
-                  isClearable={true}
-                // other props and styles for the Select component
-                />
-              </div>
-              <div>
-                <label htmlFor="selectField3" style={labelStyles}>Bad odor:</label>
-                <Select
-                  options={bad_odor_symptom_options}
-                  styles={customStyles}
-                  value={selectedBadOdorSymptomOption}
-                  onChange={(selectedBadOdorSymptomOption) => handleChange(selectedBadOdorSymptomOption, 'select12')}
-                  isClearable={true}
-                // other props and styles for the Select component
-                />
-              </div>
-            </div>
-
-            <div style={containerStyles}>
-              <div>
-                <label htmlFor="selectField1" style={labelStyles}>Ooze liquid presence:</label>
-                <Select
-                  options={options}
-                  styles={customStyles}
-                  value={selectedOozeLiquidPresenceSymptomOption}
-                  onChange={(selectedOozeLiquidPresenceSymptomOption) => handleChange(selectedOozeLiquidPresenceSymptomOption, 'select13')}
-                  isClearable={true}
-                // other props and styles for the Select component
-                />
-              </div>
-              <div>
-                <label htmlFor="selectField2" style={labelStyles}>Cross section of stem symptom:</label>
-                <Select
-                  options={options}
-                  styles={customStyles}
-                  value={selectedCrossSectionOfStemSymptomOption}
-                  onChange={(selectedCrossSectionOfStemSymptomOption) => handleChange(selectedCrossSectionOfStemSymptomOption, 'select14')}
-                  isClearable={true}
-                // other props and styles for the Select component
-                />
-              </div>
-              <div>
-                <label htmlFor="selectField3" style={labelStyles}>Curling:</label>
-                <Select
-                  options={options}
-                  styles={customStyles}
-                  value={selectedCurlingSymptomOption}
-                  onChange={(selectedCurlingSymptomOption) => handleChange(selectedCurlingSymptomOption, 'select15')}
-                  isClearable={true}
-                // other props and styles for the Select component
-                />
-              </div>
-            </div>
-
-            <div style={containerStyles2}>
-              <button onClick={handleSubmit} style={buttonStyles}>Submit</button>
-            </div>
-
-          </Grid>}
-
-          {data && selectedTab === 1 &&
-            <Grid item className={classes.buttonGrid} >
-
-              <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
-                Clear
-              </ColorButton>
-            </Grid>}
-
-          {disease && selectedTab === 1 &&
-            <Grid item className={classes.buttonGrid} >
-
-              <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
-                {disease}
-              </ColorButton>
-            </Grid>}
-
-          {possibleDiseases && selectedTab === 1 &&
-            <Grid item className={classes.buttonGrid} >
-
-              <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
-                {possibleDiseases.map((disease, index) => (
-                  <React.Fragment key={index}>
-                    {index > 0 && ', '}
-                    {disease}
-                  </React.Fragment>
+              <Stepper activeStep={1} alternativeLabel className={classes.stepper}>
+                {steps.map((label) => (
+                  <Step key={label} >
+                    <StepLabel className={classes.step}>{label}</StepLabel>
+                  </Step>
                 ))}
-              </ColorButton>
+              </Stepper>
+
+              <Card className={`${classes.imageCard} ${!image ? classes.imageCardEmpty : ''}`} style={{ height: "350px" }}>
+                {image && <CardActionArea>
+                  <CardMedia
+                    className={classes.media}
+                    image={preview}
+                    component="image"
+                    title="Leaf symptom"
+                  />
+                </CardActionArea>
+                }
+                {!image && <CardContent className={classes.content}>
+                  <DropzoneArea
+                    acceptedFiles={['image/*']}
+                    dropzoneText={"Drag and drop an image of a tomato plant leaf to process"}
+                    onChange={onSelectFile}
+                  />
+                </CardContent>}
+              </Card>
+
+              <div style={containerStyles}>
+                <div>
+                  <label htmlFor="selectField1" style={labelStyles}>Leaf Symptom: </label>
+                  <Select
+                    value={selectedLeafSymptomOption}
+                    options={options}
+                    styles={customStyles}
+                    onChange={(selectedLeafSymptomOption) => handleChange(selectedLeafSymptomOption, 'select1')}
+                    isClearable={true}
+
+                  // other props and styles for the Select component
+                  />
+                </div>
+                <div>
+                  <label htmlFor="selectField2" style={labelStyles}>Leaf Symptom Color:</label>
+                  <Select
+                    options={leaf_symptom_color_option}
+                    styles={customStyles}
+                    value={selectedLeafColorSymptomOption}
+                    onChange={(selectedLeafColorSymptomOption) => handleChange(selectedLeafColorSymptomOption, 'select2')}
+                    isClearable={true}
+
+                  // other props and styles for the Select component
+                  />
+                </div>
+                <div>
+                  <label htmlFor="selectField3" style={labelStyles}>Fruit Symptom:</label>
+                  <Select
+                    options={fruit_symptom_options}
+                    styles={customStyles}
+                    value={selectedFruitSymptomOption}
+                    onChange={(selectedFruitSymptomOption) => handleChange(selectedFruitSymptomOption, 'select3')}
+                    isClearable={true}
+
+                  // other props and styles for the Select component
+                  />
+                </div>
+              </div>
+
+              <div style={containerStyles}>
+                <div>
+                  <label htmlFor="selectField1" style={labelStyles}>Fruit Symptom Color:</label>
+                  <Select
+                    options={fruit_symptom_color_options}
+                    styles={customStyles}
+                    value={selectedFruitColorSymptomOption}
+                    onChange={(selectedFruitColorSymptomOption) => handleChange(selectedFruitColorSymptomOption, 'select4')}
+                    isClearable={true}
+
+                  // other props and styles for the Select component
+                  />
+                </div>
+                <div>
+                  <label htmlFor="selectField2" style={labelStyles}>Stem Symptom:</label>
+                  <Select
+                    options={stem_symptom_options}
+                    styles={customStyles}
+                    value={selectedStemSymptomOption}
+                    onChange={(selectedStemSymptomOption) => handleChange(selectedStemSymptomOption, 'select5')}
+                    isClearable={true}
+                  // other props and styles for the Select component
+                  />
+                </div>
+                <div>
+                  <label htmlFor="selectField3" style={labelStyles}>Stem Symptom Color:</label>
+                  <Select
+                    options={stem_symptom_color_options}
+                    styles={customStyles}
+                    value={selectedStemColorSymptomOption}
+                    onChange={(selectedStemColorSymptomOption) => handleChange(selectedStemColorSymptomOption, 'select6')}
+                    isClearable={true}
+                  // other props and styles for the Select component
+                  />
+                </div>
+              </div>
+
+              <div style={containerStyles}>
+                <div>
+                  <label htmlFor="selectField1" style={labelStyles}>Fungus Symptom:</label>
+                  <Select
+                    options={fungus_symptom_options}
+                    styles={customStyles}
+                    value={selectedFungusSymptomOption}
+                    onChange={(selectedFungusSymptomOption) => handleChange(selectedFungusSymptomOption, 'select7')}
+                    isClearable={true}
+                  // other props and styles for the Select component
+                  />
+                </div>
+                <div>
+                  <label htmlFor="selectField2" style={labelStyles}>Fungus Symptom Color:</label>
+                  <Select
+                    options={fungus_symptom_color_options}
+                    styles={customStyles}
+                    value={selectedFungusColorSymptomOption}
+                    onChange={(selectedFungusColorSymptomOption) => handleChange(selectedFungusColorSymptomOption, 'select8')}
+                    isClearable={true}
+                  // other props and styles for the Select component
+                  />
+                </div>
+                <div>
+                  <label htmlFor="selectField3" style={labelStyles}>Fruit Halo:</label>
+                  <Select
+                    options={fruit_halo_options}
+                    styles={customStyles}
+                    value={selectedFruitHaloSymptomOption}
+                    onChange={(selectedFruitHaloSymptomOption) => handleChange(selectedFruitHaloSymptomOption, 'select9')}
+                    isClearable={true}
+                  // other props and styles for the Select component
+                  />
+                </div>
+              </div>
+
+              <div style={containerStyles}>
+                <div>
+                  <label htmlFor="selectField1" style={labelStyles}>Leaf Halo:</label>
+                  <Select
+                    options={leaf_halo_options}
+                    styles={customStyles}
+                    value={selectedLeafHaloSymptomOption}
+                    onChange={(selectedLeafHaloSymptomOption) => handleChange(selectedLeafHaloSymptomOption, 'select10')}
+                    isClearable={true}
+                  // other props and styles for the Select component
+                  />
+                </div>
+                <div>
+                  <label htmlFor="selectField2" style={labelStyles}>Wilting:</label>
+                  <Select
+                    options={wilting_options}
+                    styles={customStyles}
+                    value={selectedWiltingSymptomOption}
+                    onChange={(selectedWiltingSymptomOption) => handleChange(selectedWiltingSymptomOption, 'select11')}
+                    isClearable={true}
+                  // other props and styles for the Select component
+                  />
+                </div>
+                <div>
+                  <label htmlFor="selectField3" style={labelStyles}>Bad odor:</label>
+                  <Select
+                    options={bad_odor_symptom_options}
+                    styles={customStyles}
+                    value={selectedBadOdorSymptomOption}
+                    onChange={(selectedBadOdorSymptomOption) => handleChange(selectedBadOdorSymptomOption, 'select12')}
+                    isClearable={true}
+                  // other props and styles for the Select component
+                  />
+                </div>
+              </div>
+
+              <div style={containerStyles}>
+                <div>
+                  <label htmlFor="selectField1" style={labelStyles}>Ooze liquid presence:</label>
+                  <Select
+                    options={options}
+                    styles={customStyles}
+                    value={selectedOozeLiquidPresenceSymptomOption}
+                    onChange={(selectedOozeLiquidPresenceSymptomOption) => handleChange(selectedOozeLiquidPresenceSymptomOption, 'select13')}
+                    isClearable={true}
+                  // other props and styles for the Select component
+                  />
+                </div>
+                <div>
+                  <label htmlFor="selectField2" style={labelStyles}>Cross section of stem symptom:</label>
+                  <Select
+                    options={options}
+                    styles={customStyles}
+                    value={selectedCrossSectionOfStemSymptomOption}
+                    onChange={(selectedCrossSectionOfStemSymptomOption) => handleChange(selectedCrossSectionOfStemSymptomOption, 'select14')}
+                    isClearable={true}
+                  // other props and styles for the Select component
+                  />
+                </div>
+                <div>
+                  <label htmlFor="selectField3" style={labelStyles}>Curling:</label>
+                  <Select
+                    options={options}
+                    styles={customStyles}
+                    value={selectedCurlingSymptomOption}
+                    onChange={(selectedCurlingSymptomOption) => handleChange(selectedCurlingSymptomOption, 'select15')}
+                    isClearable={true}
+                  // other props and styles for the Select component
+                  />
+                </div>
+              </div>
+
+              <div style={containerStyles2}>
+                <button onClick={handleSubmit} style={buttonStyles}>Submit</button>
+              </div>
+
             </Grid>}
 
-          {selectedTab === 2 && <Guide />}
+            {data && selectedTab === 1 &&
+              <Grid item className={classes.buttonGrid} >
 
-          {selectedTab === 3 && <Questions />}
+                <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
+                  Clear
+                </ColorButton>
+              </Grid>}
 
-        </Grid >
-      </Container >
+            {disease && selectedTab === 1 &&
+              <Grid item className={classes.buttonGrid} >
+
+                <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
+                  {disease}
+                </ColorButton>
+              </Grid>}
+
+            {possibleDiseases && selectedTab === 1 &&
+              <Grid item className={classes.buttonGrid} >
+
+                <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
+                  {possibleDiseases.map((disease, index) => (
+                    <React.Fragment key={index}>
+                      {index > 0 && ', '}
+                      {disease}
+                    </React.Fragment>
+                  ))}
+                </ColorButton>
+              </Grid>}
+
+            {selectedTab === 2 && <Guide />}
+
+            {selectedTab === 3 && <Questions />}
+
+          </Grid >
+        </Container >
       }
       <footer className={classes.footer}>
         <Typography variant="h6" align="center" gutterBottom>
