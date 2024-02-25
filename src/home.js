@@ -9,25 +9,13 @@ import Container from "@material-ui/core/Container";
 import React from "react";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import { Paper, CardActionArea, CardMedia, Grid, TableContainer, Table, TableBody, TableHead, TableRow, TableCell, Button, CircularProgress } from "@material-ui/core";
+import { Paper, CardActionArea, CardMedia, Grid, Button } from "@material-ui/core";
 import logo from "./logo.png";
-import image from "./bg2.jpg";
-import image2 from "./tomato-bg.JPG";
-// import ooze from "./ooze.png";
-// import halo from './halo.png';
-// import cross from './cross_section.png'
-// import rings from './rings.jpg'
-// import stem_ring from './stem_rings.PNG'
-// import lesion from './Lesion.PNG'
-// import spot from './Spots.PNG'
-// import fungus from './Fungus.png'
+import { sampleQuestions } from "./constants/sampleQuestions";
 import { DropzoneArea } from 'material-ui-dropzone';
 import { common } from '@material-ui/core/colors';
 import Clear from '@material-ui/icons/Clear';
-import Select from 'react-select';
 import Box from '@material-ui/core/Box';
-
-import { options, leaf_symptom_color_option, fruit_symptom_options, fruit_symptom_color_options, stem_symptom_options, stem_symptom_color_options, fungus_symptom_options, fungus_symptom_color_options, wilting_options, leaf_halo_options, leaf_halo_color_options, fruit_halo_options, fruit_halo_color_options, bad_odor_symptom_options, ooze_liquid_symptom_options, cross_section_of_stem_symptom_options, curling_symptom_options } from "./constants/symptomOptions";
 import { Guide } from "./pages/guide";
 import Questions from "./questions";
 
@@ -158,6 +146,20 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2), // Add spacing between logo and tabs
   },
 
+  dropZone: {
+    height: "315px",
+
+  },
+
+  dropZoneText: {
+    "color": '#008000',
+    "font-family": "Poppins",
+    "font-style": "normal"
+  },
+  content: {
+    margin: "auto"
+  }
+
 }));
 
 export const ImageUpload = () => {
@@ -190,7 +192,7 @@ export const ImageUpload = () => {
 
   let confidence = 0;
 
-  const sendFile = async (sympom_set) => {
+  const sendFileAndExtraSymptoms = async (sympom_set) => {
 
     let ress = await axios({
       method: "post",
@@ -252,6 +254,56 @@ export const ImageUpload = () => {
 
 
   }
+
+  const [questions] = useState(sampleQuestions);
+
+  const [userAnswers, setUserAnswers] = useState(new Array(questions.length).fill(''));
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const handleOptionClick = (option, label) => {
+
+    //Select option
+    if (userAnswers[currentQuestion] != label) {
+      const newAnswers = [...userAnswers];
+      newAnswers[currentQuestion] = label;
+      setUserAnswers(newAnswers);
+      setSelectedOption(label);
+    }
+
+    //Unselect option
+    else {
+      const newAnswers = [...userAnswers];
+      newAnswers[currentQuestion] = '';
+      setUserAnswers(newAnswers);
+      setSelectedOption(null);
+    }
+
+  };
+
+  const handleNextQuestion = () => {
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+      setSelectedOption(null); // Clear selected option for the next question
+    } else {
+      console.log('User Answers:', userAnswers);
+    }
+  };
+
+  const handlePreviousQuestion = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1);
+      setSelectedOption(userAnswers[currentQuestion - 1]);
+    }
+  };
+
+  //relates to circular button
+  const handleCircleButtonClick = (index) => {
+    setCurrentQuestion(index);
+    setSelectedOption(userAnswers[index]);
+
+  };
+
 
   const clearData = () => {
     setData(null);
@@ -322,107 +374,162 @@ export const ImageUpload = () => {
   };
 
   const handleSubmit = () => {
+    const symptomNames = [
+      "hasLeafSymptom",
+      "hasLeafSymptomColour",
+      "hasStemSymptom",
+      "hasStemSymptomColor",
+      "hasFruitSymptom",
+      "hasFruitSymptomColour",
+      "hasBadOdor",
+      "hasCrossSection",
+      "hasOozeLiquid",
+      "hasCrackInMiddle",
+      "hasWilting",
+      "hasCurling",
+      "hasFungalSymptom",
 
-    var sympom_set = {
-      "hasLeafSymptom": selectedLeafSymptomOption.value,
-      "hasLeafSymptomColour": selectedLeafColorSymptomOption.value,
-      "hasFruitSymptom": selectedFruitSymptomOption.value,
-      "hasFruitSymptomColour": selectedFruitColorSymptomOption.value,
-      "hasStemSymptom": selectedStemSymptomOption.value,
-      "hasStemSymptomColor": selectedStemColorSymptomOption.value,
-      "hasFungusSymptom": selectedFungusSymptomOption.value,
-      "hasFungusSymptomColor": selectedFungusColorSymptomOption.value,
-      "hasFruitHalo": selectedFruitHaloSymptomOption.value,
-      "hasLeafHalo": selectedLeafHaloSymptomOption.value,
-      "wilting_symptom": selectedWiltingSymptomOption.value,
-
+    ];
+    var symptom_set = {}
+    for (var i = 0; i < userAnswers.length; i++) {
+      if (userAnswers[i] !== '') {
+        symptom_set[symptomNames[i]] = userAnswers[i];
+      }
     }
-
-    var x = sendFile(sympom_set);
-
-
-    //console.log(sympom_set)
+    var x = sendFileAndExtraSymptoms(symptom_set);
   };
 
-  const [selectedLeafSymptomOption, setSelectedLeafSymptomOption] = useState('None');
-  const [selectedLeafColorSymptomOption, setSelectedLeafColorSymptomOption] = useState('None');
-  const [selectedFruitSymptomOption, setSelectedFruitSymptomOption] = useState("None");
-  const [selectedFruitColorSymptomOption, setSelectedFruitColorSymptomOption] = useState("None");
-  const [selectedStemSymptomOption, setSelectedStemSymptomOption] = useState("None");
-  const [selectedStemColorSymptomOption, setSelectedStemColorSymptomOption] = useState("None");
-  const [selectedFungusSymptomOption, setSelectedFungusSymptomOption] = useState("None");
-  const [selectedFungusColorSymptomOption, setSelectedFungusColorSymptomOption] = useState("None");
-  const [selectedFruitHaloSymptomOption, setSelectedFruitHaloSymptomOption] = useState("None");
-  const [selectedLeafHaloSymptomOption, setSelectedLeafHaloSymptomOption] = useState("None");
-  const [selectedWiltingSymptomOption, setSelectedWiltingSymptomOption] = useState("None");
-  const [selectedBadOdorSymptomOption, setSelectedBadOdorSymptomOption] = useState("None");
-  const [selectedOozeLiquidPresenceSymptomOption, setSelectedOozeLiquidPresenceSymptomOption] = useState("None");
-  const [selectedCrossSectionOfStemSymptomOption, setSelectedCrossSectionOfStemSymptomOption] = useState("None");
-  const [selectedCurlingSymptomOption, setSelectedCurlingSymptomOption] = useState("None");
 
 
-  const handleChange = (selectedOption, selectName) => {
-    if (selectName === 'select1') {
-      setSelectedLeafSymptomOption(selectedOption);
-    }
+  const quizContainerStyle = {
+    maxWidth: '800px',
+    margin: 'auto',
+    padding: '20px',
+    border: '1px solid #ccc',
+    borderRadius: '10px',
+    backgroundColor: '#fff',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    width: '800px',
+    height: '725px',
+    overflowY: 'auto',
+  };
 
-    else if (selectName === 'select2') {
-      setSelectedLeafColorSymptomOption(selectedOption);
-    }
+  const questionStyle = {
+    display: 'none',
+    fontSize: '25px'
+  };
 
-    else if (selectName === 'select3') {
-      setSelectedFruitSymptomOption(selectedOption);
-    }
-
-    else if (selectName === 'select4') {
-      setSelectedFruitColorSymptomOption(selectedOption);
-    }
-
-    else if (selectName === 'select5') {
-      setSelectedStemSymptomOption(selectedOption);
-    }
-
-    else if (selectName === 'select6') {
-      setSelectedStemColorSymptomOption(selectedOption);
-    }
-
-    else if (selectName === 'select7') {
-      setSelectedFungusSymptomOption(selectedOption);
-    }
-
-    else if (selectName === 'select8') {
-      setSelectedFungusColorSymptomOption(selectedOption);
-    }
-
-    else if (selectName === 'select9') {
-      setSelectedFruitHaloSymptomOption(selectedOption);
-    }
-
-    else if (selectName === 'select10') {
-      setSelectedLeafHaloSymptomOption(selectedOption);
-    }
-
-    else if (selectName === 'select11') {
-      setSelectedWiltingSymptomOption(selectedOption);
-    }
-
-    else if (selectName === 'select12') {
-      setSelectedBadOdorSymptomOption(selectedOption);
-    }
-
-    else if (selectName === 'select13') {
-      setSelectedOozeLiquidPresenceSymptomOption(selectedOption);
-    }
-
-    else if (selectName === 'select14') {
-      setSelectedCrossSectionOfStemSymptomOption(selectedOption);
-    }
-
-    else if (selectName === 'select15') {
-      setSelectedCurlingSymptomOption(selectedOption);
-    }
+  const activeQuestionStyle = {
+    display: 'block',
+    fontSize: '25px'
 
   };
+
+  const optionStyle = {
+    margin: '8px 0',
+    padding: '10px',
+    border: '1px solid #ccc',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s',
+  };
+
+  const selectedOptionStyle = {
+    ...optionStyle,
+    backgroundColor: '#4caf50',
+    color: '#fff',
+  };
+
+  const buttonContainerStyle = {
+    display: 'flex',
+    justifyContent: currentQuestion === 0 ? 'flex-end' : 'space-between',
+    marginTop: '20px',
+  };
+
+  const buttonStyles2 = {
+    backgroundColor: 'green',
+    color: 'white',
+    border: 'none',
+    padding: '20px 40px',
+    cursor: 'pointer',
+    borderRadius: '10px',
+    marginTop: '10px',
+    marginLeft: '10px'
+
+  };
+
+  const nextButtonStyle = {
+    padding: '10px',
+    backgroundColor: '#4caf50',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontSize: '16px',
+  };
+
+  const previousButtonStyle = {
+    padding: '10px',
+    backgroundColor: '#4caf50',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontSize: '16px',
+  };
+
+  const hoverButtonStyle = {
+    backgroundColor: '#45a049',
+  };
+
+
+
+  // related to circular button 
+  const circleButtonContainerStyle = {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: '20px',
+  };
+
+  const circleButtonStyle = {
+    width: '30px',
+    height: '30px',
+    borderRadius: '50%',
+    border: '1px solid #ccc',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
+    marginRight: '10px',
+    backgroundColor: '#fff',
+  };
+
+  const highlightedCircleButtonStyle = {
+    ...circleButtonStyle,
+    backgroundColor: '#4caf50',
+    color: '#fff',
+  };
+
+
+
+
+  //related to answer image 
+  const imageStyle = {
+    maxWidth: '150px',
+    maxHeight: '150px',
+    marginLeft: '10px',
+    transition: 'transform 0.3s ease-in-out',
+  };
+
+  const handleImageHover = (event) => {
+    event.target.style.transform = 'scale(1.2)';
+  };
+
+  const handleImageLeave = (event) => {
+    event.target.style.transform = 'scale(1)';
+  };
+
+
 
   return (
     <React.Fragment>
@@ -459,7 +566,13 @@ export const ImageUpload = () => {
             }
 
             {selectedTab === 1 && predictOption === 2 &&
-              <PredictOption predictOption={predictOption} onOptionChange={handlePredictOption} />
+              <Grid container xs={12} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '5px' }}>
+                <ColorButton variant="contained" color="primary" component="div" onClick={(e) => { setPredictOption(0) }} >
+                  Go Back
+                </ColorButton>
+                <Questions />
+
+              </Grid>
             }
 
             {selectedTab === 1 && predictOption === 1 && predictStep === 1 && <Grid item xs={12}>
@@ -496,6 +609,8 @@ export const ImageUpload = () => {
                       acceptedFiles={['image/*']}
                       dropzoneText={"Drag and drop an image of a tomato plant leaf to process"}
                       onChange={onSelectFile}
+                      dropzoneClass={classes.dropZone}
+                      dropzoneParagraphClass={classes.dropZoneText}
                     />
                   </CardContent>}
                 </Card>
@@ -535,192 +650,78 @@ export const ImageUpload = () => {
                 </CardContent>}
               </Card>
 
-              <div style={containerStyles}>
-                <div>
-                  <label htmlFor="selectField1" style={labelStyles}>Leaf Symptom: </label>
-                  <Select
-                    value={selectedLeafSymptomOption}
-                    options={options}
-                    styles={customStyles}
-                    onChange={(selectedLeafSymptomOption) => handleChange(selectedLeafSymptomOption, 'select1')}
-                    isClearable={true}
+              <div style={{ "height": "850px", "marginTop": "100px", "paddingTop": "50px", "background": "#90EE90", "borderRadius": "10px" }}>
+                <div style={quizContainerStyle}>
+                  {/* Circular buttons */}
+                  <div style={circleButtonContainerStyle}>
+                    {questions.map((q, index) => (
+                      <div
+                        key={q.id}
+                        style={index === currentQuestion ? highlightedCircleButtonStyle : circleButtonStyle}
+                        onClick={() => handleCircleButtonClick(index)}
+                      >
+                        {index + 1}
+                      </div>
+                    ))}
+                  </div>
 
-                  // other props and styles for the Select component
-                  />
-                </div>
-                <div>
-                  <label htmlFor="selectField2" style={labelStyles}>Leaf Symptom Color:</label>
-                  <Select
-                    options={leaf_symptom_color_option}
-                    styles={customStyles}
-                    value={selectedLeafColorSymptomOption}
-                    onChange={(selectedLeafColorSymptomOption) => handleChange(selectedLeafColorSymptomOption, 'select2')}
-                    isClearable={true}
-
-                  // other props and styles for the Select component
-                  />
-                </div>
-                <div>
-                  <label htmlFor="selectField3" style={labelStyles}>Fruit Symptom:</label>
-                  <Select
-                    options={fruit_symptom_options}
-                    styles={customStyles}
-                    value={selectedFruitSymptomOption}
-                    onChange={(selectedFruitSymptomOption) => handleChange(selectedFruitSymptomOption, 'select3')}
-                    isClearable={true}
-
-                  // other props and styles for the Select component
-                  />
+                  {/*Questions and Answers */}
+                  {questions.map((q, index) => (
+                    <div key={q.id} style={index === currentQuestion ? activeQuestionStyle : questionStyle}>
+                      <p>{q.question}</p>
+                      <ul>
+                        {q.options.map((option, optionIndex) => (
+                          <li
+                            key={optionIndex}
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              padding: '10px',
+                              border: '1px solid #ccc',
+                              borderRadius: '5px',
+                              marginBottom: '8px',
+                              cursor: 'pointer',
+                              transition: 'background-color 0.3s',
+                              ...(q.labels[optionIndex] === selectedOption ? selectedOptionStyle : optionStyle)
+                            }}
+                            onClick={() => handleOptionClick(option, q.labels[optionIndex])}
+                          >
+                            {option}
+                            {q.images && q.images[optionIndex] && (
+                              <img
+                                src={q.images[optionIndex]}
+                                alt={`Image for ${option}`}
+                                style={{ ...imageStyle }}
+                                // style={{ maxWidth: '200px', maxHeight: '250px', marginLeft: '10px' }}
+                                onMouseEnter={handleImageHover}
+                                onMouseLeave={handleImageLeave}
+                              />
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                  <div style={buttonContainerStyle}>
+                    <button
+                      style={{ ...previousButtonStyle, display: currentQuestion === 0 ? 'none' : 'inline-block' }}
+                      onClick={handlePreviousQuestion}
+                    >
+                      Previous Question
+                    </button>
+                    <button
+                      style={Object.assign({}, nextButtonStyle, currentQuestion === questions.length - 1 && hoverButtonStyle)}
+                      onClick={handleNextQuestion}
+                    >
+                      {currentQuestion === questions.length - 1 ? 'Finish' : 'Next Question'}
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              <div style={containerStyles}>
-                <div>
-                  <label htmlFor="selectField1" style={labelStyles}>Fruit Symptom Color:</label>
-                  <Select
-                    options={fruit_symptom_color_options}
-                    styles={customStyles}
-                    value={selectedFruitColorSymptomOption}
-                    onChange={(selectedFruitColorSymptomOption) => handleChange(selectedFruitColorSymptomOption, 'select4')}
-                    isClearable={true}
-
-                  // other props and styles for the Select component
-                  />
-                </div>
-                <div>
-                  <label htmlFor="selectField2" style={labelStyles}>Stem Symptom:</label>
-                  <Select
-                    options={stem_symptom_options}
-                    styles={customStyles}
-                    value={selectedStemSymptomOption}
-                    onChange={(selectedStemSymptomOption) => handleChange(selectedStemSymptomOption, 'select5')}
-                    isClearable={true}
-                  // other props and styles for the Select component
-                  />
-                </div>
-                <div>
-                  <label htmlFor="selectField3" style={labelStyles}>Stem Symptom Color:</label>
-                  <Select
-                    options={stem_symptom_color_options}
-                    styles={customStyles}
-                    value={selectedStemColorSymptomOption}
-                    onChange={(selectedStemColorSymptomOption) => handleChange(selectedStemColorSymptomOption, 'select6')}
-                    isClearable={true}
-                  // other props and styles for the Select component
-                  />
-                </div>
-              </div>
-
-              <div style={containerStyles}>
-                <div>
-                  <label htmlFor="selectField1" style={labelStyles}>Fungus Symptom:</label>
-                  <Select
-                    options={fungus_symptom_options}
-                    styles={customStyles}
-                    value={selectedFungusSymptomOption}
-                    onChange={(selectedFungusSymptomOption) => handleChange(selectedFungusSymptomOption, 'select7')}
-                    isClearable={true}
-                  // other props and styles for the Select component
-                  />
-                </div>
-                <div>
-                  <label htmlFor="selectField2" style={labelStyles}>Fungus Symptom Color:</label>
-                  <Select
-                    options={fungus_symptom_color_options}
-                    styles={customStyles}
-                    value={selectedFungusColorSymptomOption}
-                    onChange={(selectedFungusColorSymptomOption) => handleChange(selectedFungusColorSymptomOption, 'select8')}
-                    isClearable={true}
-                  // other props and styles for the Select component
-                  />
-                </div>
-                <div>
-                  <label htmlFor="selectField3" style={labelStyles}>Fruit Halo:</label>
-                  <Select
-                    options={fruit_halo_options}
-                    styles={customStyles}
-                    value={selectedFruitHaloSymptomOption}
-                    onChange={(selectedFruitHaloSymptomOption) => handleChange(selectedFruitHaloSymptomOption, 'select9')}
-                    isClearable={true}
-                  // other props and styles for the Select component
-                  />
-                </div>
-              </div>
-
-              <div style={containerStyles}>
-                <div>
-                  <label htmlFor="selectField1" style={labelStyles}>Leaf Halo:</label>
-                  <Select
-                    options={leaf_halo_options}
-                    styles={customStyles}
-                    value={selectedLeafHaloSymptomOption}
-                    onChange={(selectedLeafHaloSymptomOption) => handleChange(selectedLeafHaloSymptomOption, 'select10')}
-                    isClearable={true}
-                  // other props and styles for the Select component
-                  />
-                </div>
-                <div>
-                  <label htmlFor="selectField2" style={labelStyles}>Wilting:</label>
-                  <Select
-                    options={wilting_options}
-                    styles={customStyles}
-                    value={selectedWiltingSymptomOption}
-                    onChange={(selectedWiltingSymptomOption) => handleChange(selectedWiltingSymptomOption, 'select11')}
-                    isClearable={true}
-                  // other props and styles for the Select component
-                  />
-                </div>
-                <div>
-                  <label htmlFor="selectField3" style={labelStyles}>Bad odor:</label>
-                  <Select
-                    options={bad_odor_symptom_options}
-                    styles={customStyles}
-                    value={selectedBadOdorSymptomOption}
-                    onChange={(selectedBadOdorSymptomOption) => handleChange(selectedBadOdorSymptomOption, 'select12')}
-                    isClearable={true}
-                  // other props and styles for the Select component
-                  />
-                </div>
-              </div>
-
-              <div style={containerStyles}>
-                <div>
-                  <label htmlFor="selectField1" style={labelStyles}>Ooze liquid presence:</label>
-                  <Select
-                    options={options}
-                    styles={customStyles}
-                    value={selectedOozeLiquidPresenceSymptomOption}
-                    onChange={(selectedOozeLiquidPresenceSymptomOption) => handleChange(selectedOozeLiquidPresenceSymptomOption, 'select13')}
-                    isClearable={true}
-                  // other props and styles for the Select component
-                  />
-                </div>
-                <div>
-                  <label htmlFor="selectField2" style={labelStyles}>Cross section of stem symptom:</label>
-                  <Select
-                    options={options}
-                    styles={customStyles}
-                    value={selectedCrossSectionOfStemSymptomOption}
-                    onChange={(selectedCrossSectionOfStemSymptomOption) => handleChange(selectedCrossSectionOfStemSymptomOption, 'select14')}
-                    isClearable={true}
-                  // other props and styles for the Select component
-                  />
-                </div>
-                <div>
-                  <label htmlFor="selectField3" style={labelStyles}>Curling:</label>
-                  <Select
-                    options={options}
-                    styles={customStyles}
-                    value={selectedCurlingSymptomOption}
-                    onChange={(selectedCurlingSymptomOption) => handleChange(selectedCurlingSymptomOption, 'select15')}
-                    isClearable={true}
-                  // other props and styles for the Select component
-                  />
-                </div>
-              </div>
-
-              <div style={containerStyles2}>
-                <button onClick={handleSubmit} style={buttonStyles}>Submit</button>
+              <div style={{ "display": "flex", "alignItems": "center", "justifyContent": "center", "marginTop": "60px" }}>
+                <button onClick={handleSubmit} style={{ ...buttonStyles2, "marginBottom": "50px" }}>Submit and predict</button>
               </div>
 
             </Grid>}

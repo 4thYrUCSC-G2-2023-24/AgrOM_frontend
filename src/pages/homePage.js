@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
   section2: {
     backgroundColor: 'white',
     padding: theme.spacing(5),
+    marginBottom: '50px'
   },
   section2Title: {
     marginBottom: '10px',
@@ -81,6 +82,71 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Poppins',
     maxWidth: '60%',
   },
+
+  aboutContainer: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: '50px'
+  },
+  aboutHeading: {
+    width: 430,
+  },
+  aboutHeadingText: {
+    color: theme.palette.primary.main,
+    fontSize: '1rem',
+    letterSpacing: '1px',
+    textTransform: 'uppercase',
+  },
+  aboutHeadingTitle: {
+    fontFamily: 'Poppins',
+    fontSize: '2.1rem',
+    margin: '15px 0',
+    lineHeight: '2.8rem',
+    color: '#0f0f0f',
+
+  },
+  aboutDetails: {
+    width: 475,
+  },
+  aboutDetailsText: {
+    fontFamily: 'Poppins',
+    color: theme.palette.text.secondary,
+    margin: '10px 0',
+  },
+
+
+  finalSection: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+  },
+
+  heading: {
+    fontSize: '2.35rem',
+    letterSpacing: '1px',
+    fontFamily: 'Poppins'
+  },
+  paragraph: {
+    color: theme.palette.text.secondary,
+    maxWidth: 700,
+    margin: '15px 0',
+    letterSpacing: '1px',
+    fontFamily: "Poppins"
+
+  },
+
+
+  strongText: {
+    color: '#0f0f0f',
+    fontSize: '1rem',
+    letterSpacing: '1px',
+    fontWeight: 700,
+  },
 }));
 
 const HomePage = ({ changeSelectTab }) => {
@@ -104,6 +170,22 @@ const HomePage = ({ changeSelectTab }) => {
             <Button variant="contained" className={classes.section1Button} onClick={e => onButtonClick(1)}>
               Diagnose your plant
             </Button>
+          </Grid>
+        </Grid>
+      </Box>
+      <Box className={classes.section2}>
+        <Grid container className={classes.aboutContainer}>
+          <Grid item xs={12} sm={6} className={classes.aboutHeading} data-aos="flip-left">
+
+            <Typography variant="h3" className={classes.aboutHeadingTitle}>
+              What is AgrOM?
+            </Typography>
+
+          </Grid>
+          <Grid item xs={12} sm={6} className={classes.aboutDetails} data-aos="flip-right">
+            <Typography variant="body1" className={classes.aboutDetailsText}>
+              AgrOM is plant disease prediction system which make use of Hybrid model consists of Images classification model and plant disease ontology. The uniquness of AgrOM is that make prediction with the help of image and domain knowledge. You can predict the disease using image classification model by uploading image of plant leaf. You can also predict the disease by answering questions based on your observation of plant symptoms. Moreover you can upload images and input the answers for questions for more accurate prediction. The image classification model uses VGG16 pretrained model and the ontology model contains domain knowledge of tomato plant disease
+            </Typography>
           </Grid>
         </Grid>
       </Box>
@@ -144,6 +226,7 @@ const HomePage = ({ changeSelectTab }) => {
           </Grid>
         </Grid>
       </Box>
+
       <Box className={classes.section3}>
         <Typography variant="h4" gutterBottom className={classes.section3Title}>
           Our Features
@@ -157,6 +240,24 @@ const HomePage = ({ changeSelectTab }) => {
         <Typography variant="h6" gutterBottom className={classes.section3Title}>
           Diagnose the Tomato plant using images and extra symptoms.
         </Typography>
+      </Box>
+
+      <Box className={classes.section2}>
+        <section id="final" data-aos="fade-down" className={classes.finalSection}>
+          <Typography variant="subtitle1" className={classes.strongText}>
+            What's Next?
+          </Typography>
+          <Typography variant="h3" className={classes.heading}>
+            Diagnose your tomato plant with AgrOM
+          </Typography>
+          <Typography variant="body1" className={classes.paragraph}>
+            AgrOM can help you to identify the diseases of your tomato plant and provide solutions to cure it
+          </Typography>
+          <Button variant="contained" className={classes.section1Button} onClick={e => onButtonClick(1)}>
+            Diagnose your plant
+          </Button>
+        </section>
+
       </Box>
     </Container>
   );
