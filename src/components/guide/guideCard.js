@@ -31,9 +31,7 @@ export const GuideCard = (props) => {
             <Typography gutterBottom component="div" variant="h5" style={{ fontFamily: 'Poppins' }}>
               {card.props.title}
             </Typography>
-            <Typography variant="subtitle1" color="text.secondary" component="div" style={{ fontFamily: 'Poppins' }}>
-              {card.props.subtitle}
-            </Typography>
+
           </CardContent>
         </CardActionArea>
       </Card>

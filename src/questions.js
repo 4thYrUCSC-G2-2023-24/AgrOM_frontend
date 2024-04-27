@@ -424,17 +424,19 @@ const Questions = () => {
         const symptomNames = [
             "hasLeafSymptom",
             "hasLeafSymptomColour",
+            "hasLeafHalo",
             "hasStemSymptom",
             "hasStemSymptomColor",
             "hasFruitSymptom",
             "hasFruitSymptomColour",
+            "hasFruitHalo",
             "hasBadOdor",
             "hasCrossSection",
             "hasOozeLiquid",
-            "hasCrackInMiddle",
-            "hasWilting",
+            "hasCracks",
+            "hasPlantSymptom",
             "hasCurling",
-            "hasFungalSymptom",
+            "hasFungalColour",
 
         ];
         var symptom_set = {}

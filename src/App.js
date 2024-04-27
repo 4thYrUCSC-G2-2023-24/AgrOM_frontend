@@ -1,11 +1,11 @@
-import { ImageUpload } from "./home";
+import { Home } from "./Home";
 import { ImageUpload3 } from "./homev2";
 import Login from "./login";
 import Questions from "./questions";
 import './app.css'
 
 function App() {
-  return <ImageUpload />;
+  return <Home />;
   // return <ImageUpload3 />;
 }
 

@@ -104,8 +104,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
   },
   buttonGrid: {
-    maxWidth: "416px",
+    maxWidth: "600px",
     width: "100%",
+    marginBottom: "25px"
   },
   detail: {
     backgroundColor: 'white',
@@ -162,7 +163,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export const ImageUpload = () => {
+export const Home = () => {
   const classes = useStyles();
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
@@ -207,6 +208,7 @@ export const ImageUpload = () => {
       console.log("success")
       if (image) {
         let formData = new FormData();
+
         formData.append("file", selectedFile);
         let res = await axios({
           method: "post",
@@ -346,6 +348,9 @@ export const ImageUpload = () => {
       return;
     }
     setSelectedFile(files[0]);
+    console.log("file")
+    console.log(files[0])
+
     setData(undefined);
     setImage(true);
   };
@@ -377,25 +382,32 @@ export const ImageUpload = () => {
     const symptomNames = [
       "hasLeafSymptom",
       "hasLeafSymptomColour",
+      "hasLeafHalo",
       "hasStemSymptom",
       "hasStemSymptomColor",
       "hasFruitSymptom",
       "hasFruitSymptomColour",
+      "hasFruitHalo",
       "hasBadOdor",
       "hasCrossSection",
       "hasOozeLiquid",
-      "hasCrackInMiddle",
-      "hasWilting",
+      "hasCracks",
+      "hasPlantSymptom",
       "hasCurling",
-      "hasFungalSymptom",
+      "hasFungalColour",
 
     ];
     var symptom_set = {}
+
     for (var i = 0; i < userAnswers.length; i++) {
       if (userAnswers[i] !== '') {
         symptom_set[symptomNames[i]] = userAnswers[i];
       }
     }
+
+    console.log(symptom_set)
+
+
     var x = sendFileAndExtraSymptoms(symptom_set);
   };
 
@@ -543,7 +555,6 @@ export const ImageUpload = () => {
             <Tab label="Home" />
             <Tab label="Predict" />
             <Tab label="Guide" />
-            <Tab label="Questions" />
             {/* Add more tabs as needed */}
           </Tabs>
           <Avatar src={logo} className={classes.logo}></Avatar>
@@ -763,12 +774,42 @@ export const ImageUpload = () => {
         </Container >
       }
       <footer className={classes.footer}>
-        <Typography variant="h6" align="center" gutterBottom>
-          Website Footer
-        </Typography>
-        <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </Typography>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div>
+            <Typography variant="body2" align="left" color="textPrimary" component="p" style={{ color: '#D3D3D3', fontSize: '35px', fontFamily: "Poppins" }}>
+              Agrom
+            </Typography>
+          </div>
+          <div>
+            <Typography variant="body2" align="center" color="textSecondary" component="p" style={{ color: '#D3D3D3', fontSize: '15px', fontFamily: "Poppins" }} >
+              Contact
+            </Typography>
+            <Typography variant="body2" align="center" color="textSecondary" component="p" style={{ color: '#D3D3D3', fontSize: '15px', fontFamily: "Poppins" }} >
+              +1 123 456 789
+            </Typography>
+            <Typography variant="body2" align="center" color="textSecondary" component="p" style={{ color: '#D3D3D3', fontSize: '15px', fontFamily: "Poppins" }}>
+              +1 987 654 321
+            </Typography>
+            <Typography variant="body2" align="center" color="textSecondary" component="p" style={{ color: '#D3D3D3', fontSize: '15px', fontFamily: "Poppins" }}>
+              +1 555 555 555
+            </Typography>
+          </div>
+          <div>
+            <Typography variant="subtitle1" align="right" color="textSecondary" component="p" style={{ color: '#D3D3D3', fontSize: '15px', fontFamily: "Poppins" }}>
+              Emails:
+            </Typography>
+            <Typography variant="body2" align="right" color="textSecondary" component="p" style={{ color: '#D3D3D3', fontSize: '15px', fontFamily: "Poppins" }}>
+              info@example.com
+            </Typography>
+            <Typography variant="body2" align="right" color="textSecondary" component="p" style={{ color: '#D3D3D3', fontSize: '15px', fontFamily: "Poppins" }}>
+              support@example.com
+            </Typography>
+            <Typography variant="body2" align="right" color="textSecondary" component="p" style={{ color: '#D3D3D3', fontSize: '15px', fontFamily: "Poppins" }}>
+              sales@example.com
+            </Typography>
+          </div>
+        </div>
+
       </footer>
     </React.Fragment >
   );
