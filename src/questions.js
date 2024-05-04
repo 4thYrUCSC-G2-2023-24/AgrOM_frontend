@@ -7,7 +7,7 @@ import { Paper, CardActionArea, CardMedia, Grid, Button, CircularProgress } from
 import { common } from '@material-ui/core/colors';
 import Clear from '@material-ui/icons/Clear';
 import { sampleQuestions } from "./constants/sampleQuestions";
-
+import { initialQuestion, sampleLeafQuestions, sampleStemQuestions, sampleFruitQuestions, sampleSpecialQuestions } from "./constants/sampleQuestions";
 
 
 
@@ -89,9 +89,6 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: 'none',
         color: 'white'
     },
-    loader: {
-        color: '#be6a77 !important',
-    },
 
 
     logo: {
@@ -119,15 +116,18 @@ const Questions = () => {
     const [preview, setPreview] = useState();
     const [data, setData] = useState();
     const [image, setImage] = useState(false);
-    const [isLoading, setIsloading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [disease, setDisease] = useState();
     const [possibleDiseases, setPossibleDiseases] = useState();
     const [selectedTab, setSelectedTab] = React.useState(0);
+    const [flag, setFlag] = useState(0);
+    const [selectedOptions, setSelectedOptions] = useState([]);
+
 
     let confidence = 0;
 
     const sendFileAndExtraSymptoms = async (sympom_set) => {
-
+        setIsLoading(true);
 
         let ress = await axios({
             method: "post",
@@ -163,38 +163,44 @@ const Questions = () => {
                 if (res.status === 200) {
                     console.log(res.data)
                     setPossibleDiseases(res.data.disease)
+                    setIsLoading(false);
                 }
             }
         }
     }
 
 
-    const [questions] = useState(sampleQuestions);
+    const [questions, setQuestions] = useState([]);
 
-    const [userAnswers, setUserAnswers] = useState(new Array(questions.length).fill(''));
+    const [userAnswers, setUserAnswers] = useState({});
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [selectedOption, setSelectedOption] = useState(null);
 
-    const handleOptionClick = (option, label) => {
 
-        //Select option
-        if (userAnswers[currentQuestion] != label) {
-            const newAnswers = [...userAnswers];
-            newAnswers[currentQuestion] = label;
-            setUserAnswers(newAnswers);
+    const handleOptionClick = (option, label) => {
+        if (userAnswers[currentQuestion]) {
+            if (userAnswers[currentQuestion].label !== label) {
+                setUserAnswers(prevAnswers => ({
+                    ...prevAnswers,
+                    [currentQuestion]: { label: label, uid: questions[currentQuestion].uid }
+                }));
+                setSelectedOption(label);
+            } else {
+                setUserAnswers(prevAnswers => ({
+                    ...prevAnswers,
+                    [currentQuestion]: ''
+                }));
+                setSelectedOption(null);
+            }
+        } else {
+            setUserAnswers(prevAnswers => ({
+                ...prevAnswers,
+                [currentQuestion]: { label: label, uid: questions[currentQuestion].uid }
+            }));
             setSelectedOption(label);
         }
 
-        //Unselect option
-        else {
-            const newAnswers = [...userAnswers];
-            newAnswers[currentQuestion] = '';
-            setUserAnswers(newAnswers);
-            setSelectedOption(null);
-        }
-
     };
-
     const handleNextQuestion = () => {
         if (currentQuestion < questions.length - 1) {
             setCurrentQuestion(currentQuestion + 1);
@@ -207,16 +213,60 @@ const Questions = () => {
     const handlePreviousQuestion = () => {
         if (currentQuestion > 0) {
             setCurrentQuestion(currentQuestion - 1);
-            setSelectedOption(userAnswers[currentQuestion - 1]);
+            setSelectedOption(userAnswers[currentQuestion - 1].label);
         }
     };
 
     //relates to circular button
     const handleCircleButtonClick = (index) => {
         setCurrentQuestion(index);
-        setSelectedOption(userAnswers[index]);
+        const selectedAnswer = userAnswers[index];
+        setSelectedOption(selectedAnswer ? selectedAnswer.label : null);
 
     };
+
+    const handleTypeOptionClick = (option, label) => {
+        // Check if the option is already selected
+        const isOptionSelected = selectedOptions.includes(label);
+
+        // If the option is selected, remove it from the selected options
+        if (isOptionSelected) {
+            setSelectedOptions(selectedOptions.filter((selectedOption) => selectedOption !== label));
+        } else {
+            // If the option is not selected, add it to the selected options
+            setSelectedOptions([...selectedOptions, label]);
+        }
+    };
+
+
+    const handleTypeSubmission = () => {
+        let concatenatedQuestions = [];
+        let idCounter = 1; // Initialize ID counter
+        selectedOptions.forEach((selection) => {
+            let questionsToAdd = [];
+            switch (selection) {
+                case 'leaf_symp':
+                    questionsToAdd = sampleLeafQuestions.map((question) => ({ ...question, id: idCounter++ }));
+                    break;
+                case 'stem_symp':
+                    questionsToAdd = sampleStemQuestions.map((question) => ({ ...question, id: idCounter++ }));
+                    break;
+                case 'fruit_symp':
+                    questionsToAdd = sampleFruitQuestions.map((question) => ({ ...question, id: idCounter++ }));
+                    break;
+                case 'special_symp':
+                    questionsToAdd = sampleSpecialQuestions.map((question) => ({ ...question, id: idCounter++ }));
+                    break;
+                default:
+                    break;
+            }
+            concatenatedQuestions = concatenatedQuestions.concat(questionsToAdd);
+        });
+
+        setQuestions(concatenatedQuestions);
+        setFlag(1);
+
+    }
 
     const clearData = () => {
         setData(null);
@@ -225,6 +275,11 @@ const Questions = () => {
         setPreview(null);
         setDisease(null);
         setPossibleDiseases(null);
+        setUserAnswers({});
+        setCurrentQuestion(0);
+        setSelectedOption(null);
+        setFlag(0);
+        setSelectedOptions([]);
 
     };
 
@@ -437,137 +492,208 @@ const Questions = () => {
             "hasPlantSymptom",
             "hasCurling",
             "hasFungalColour",
-
+            "hasWebbing",
         ];
         var symptom_set = {}
-        for (var i = 0; i < userAnswers.length; i++) {
-            if (userAnswers[i] !== '') {
-                symptom_set[symptomNames[i]] = userAnswers[i];
+        for (var i = 0; i < questions.length; i++) {
+
+            if (userAnswers[i]) {
+                if (userAnswers[i].label !== '') {
+                    var property = symptomNames[userAnswers[i].uid - 1]
+                    console.log(property)
+                    symptom_set[property] = userAnswers[i].label;
+                }
             }
+
         }
+
+        console.log(symptom_set)
         var x = sendFileAndExtraSymptoms(symptom_set);
     };
 
 
 
 
+    if (flag == 0) {
+        return (
+            <React.Fragment>
+                <Container maxWidth={false} className={classes.mainContainer} disableGutters={true}>
+                    {selectedTab === 0 && (
+                        <Grid item xs={12}>
+                            <div>
+                                {/* Quiz container */}
+                                <div style={quizContainerStyle}>
+                                    {/*Questions and Answers */}
+                                    <div style={activeQuestionStyle}>
+                                        <p>{initialQuestion.question}</p>
+                                        <ul>
+                                            {initialQuestion.options.map((option, optionIndex) => (
+                                                <li
+                                                    key={optionIndex}
+                                                    style={{
+                                                        display: 'flex',
+                                                        justifyContent: 'space-between',
+                                                        alignItems: 'center',
+                                                        padding: '10px',
+                                                        border: '1px solid #ccc',
+                                                        borderRadius: '5px',
+                                                        marginBottom: '8px',
+                                                        cursor: 'pointer',
+                                                        transition: 'background-color 0.3s',
+                                                        ...(selectedOptions.includes(initialQuestion.labels[optionIndex]) ? selectedOptionStyle : optionStyle)
+                                                    }}
+                                                    onClick={() => handleTypeOptionClick(option, initialQuestion.labels[optionIndex])}
+                                                >
 
-    return (
-        <React.Fragment>
-            <Container maxWidth={false} className={classes.mainContainer} disableGutters={true}>
-                {selectedTab === 0 && <Grid item xs={12}>
-                    <div>
-                        {/* Quiz container */}
-                        <div style={quizContainerStyle}>
-                            {/* Circular buttons */}
-                            <div style={circleButtonContainerStyle}>
+                                                    {option}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                    <div style={buttonContainerStyle}>
+                                        <button
+                                            style={Object.assign({}, nextButtonStyle, currentQuestion === questions.length - 1 && hoverButtonStyle)}
+                                            onClick={handleTypeSubmission}
+                                        >
+                                            Submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </Grid>
+                    )}
+                </Container>
+            </React.Fragment>
+        );
+    } else {
+        return (
+            <React.Fragment>
+                {isLoading && (
+                    <div style={{
+                        position: 'fixed',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        zIndex: 1000,
+                    }}>
+                        <CircularProgress style={{ color: '#be6a77' }} />
+                    </div>
+                )}
+                <Container maxWidth={false} className={classes.mainContainer} disableGutters={true}>
+                    {selectedTab === 0 && <Grid item xs={12}>
+                        <div>
+                            {/* Quiz container */}
+                            <div style={quizContainerStyle}>
+                                {/* Circular buttons */}
+                                <div style={circleButtonContainerStyle}>
+                                    {questions.map((q, index) => (
+                                        <div
+                                            key={q.id}
+                                            style={index === currentQuestion ? highlightedCircleButtonStyle : circleButtonStyle}
+                                            onClick={() => handleCircleButtonClick(index)}
+                                        >
+                                            {index + 1}
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/*Questions and Answers */}
                                 {questions.map((q, index) => (
-                                    <div
-                                        key={q.id}
-                                        style={index === currentQuestion ? highlightedCircleButtonStyle : circleButtonStyle}
-                                        onClick={() => handleCircleButtonClick(index)}
-                                    >
-                                        {index + 1}
+                                    <div key={q.id} style={index === currentQuestion ? activeQuestionStyle : questionStyle}>
+                                        <p>{q.question}</p>
+                                        <ul>
+                                            {q.options.map((option, optionIndex) => (
+                                                <li
+                                                    key={optionIndex}
+                                                    style={{
+                                                        display: 'flex',
+                                                        justifyContent: 'space-between',
+                                                        alignItems: 'center',
+                                                        padding: '10px',
+                                                        border: '1px solid #ccc',
+                                                        borderRadius: '5px',
+                                                        marginBottom: '8px',
+                                                        cursor: 'pointer',
+                                                        transition: 'background-color 0.3s',
+                                                        ...(q.labels[optionIndex] === selectedOption ? selectedOptionStyle : optionStyle)
+                                                    }}
+                                                    onClick={() => handleOptionClick(option, q.labels[optionIndex])}
+                                                >
+                                                    {option}
+                                                    {q.images && q.images[optionIndex] && (
+                                                        <img
+                                                            src={q.images[optionIndex]}
+                                                            alt={`Image for ${option}`}
+                                                            style={{ ...imageStyle }}
+                                                            // style={{ maxWidth: '200px', maxHeight: '250px', marginLeft: '10px' }}
+                                                            onMouseEnter={handleImageHover}
+                                                            onMouseLeave={handleImageLeave}
+                                                        />
+                                                    )}
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </div>
                                 ))}
+                                <div style={buttonContainerStyle}>
+                                    <button
+                                        style={{ ...previousButtonStyle, display: currentQuestion === 0 ? 'none' : 'inline-block' }}
+                                        onClick={handlePreviousQuestion}
+                                    >
+                                        Previous Question
+                                    </button>
+                                    <button
+                                        style={Object.assign({}, nextButtonStyle, currentQuestion === questions.length - 1 && hoverButtonStyle)}
+                                        onClick={handleNextQuestion}
+                                    >
+                                        {currentQuestion === questions.length - 1 ? 'Finish' : 'Next Question'}
+                                    </button>
+                                </div>
                             </div>
 
-                            {/*Questions and Answers */}
-                            {questions.map((q, index) => (
-                                <div key={q.id} style={index === currentQuestion ? activeQuestionStyle : questionStyle}>
-                                    <p>{q.question}</p>
-                                    <ul>
-                                        {q.options.map((option, optionIndex) => (
-                                            <li
-                                                key={optionIndex}
-                                                style={{
-                                                    display: 'flex',
-                                                    justifyContent: 'space-between',
-                                                    alignItems: 'center',
-                                                    padding: '10px',
-                                                    border: '1px solid #ccc',
-                                                    borderRadius: '5px',
-                                                    marginBottom: '8px',
-                                                    cursor: 'pointer',
-                                                    transition: 'background-color 0.3s',
-                                                    ...(q.labels[optionIndex] === selectedOption ? selectedOptionStyle : optionStyle)
-                                                }}
-                                                onClick={() => handleOptionClick(option, q.labels[optionIndex])}
-                                            >
-                                                {option}
-                                                {q.images && q.images[optionIndex] && (
-                                                    <img
-                                                        src={q.images[optionIndex]}
-                                                        alt={`Image for ${option}`}
-                                                        style={{ ...imageStyle }}
-                                                        // style={{ maxWidth: '200px', maxHeight: '250px', marginLeft: '10px' }}
-                                                        onMouseEnter={handleImageHover}
-                                                        onMouseLeave={handleImageLeave}
-                                                    />
-                                                )}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            ))}
-                            <div style={buttonContainerStyle}>
-                                <button
-                                    style={{ ...previousButtonStyle, display: currentQuestion === 0 ? 'none' : 'inline-block' }}
-                                    onClick={handlePreviousQuestion}
-                                >
-                                    Previous Question
-                                </button>
-                                <button
-                                    style={Object.assign({}, nextButtonStyle, currentQuestion === questions.length - 1 && hoverButtonStyle)}
-                                    onClick={handleNextQuestion}
-                                >
-                                    {currentQuestion === questions.length - 1 ? 'Finish' : 'Next Question'}
-                                </button>
-                            </div>
                         </div>
 
-                    </div>
+                        {/* Predict button */}
+                        <div style={{ "display": "flex", "alignItems": "center", "justifyContent": "center", "marginTop": "60px" }}>
+                            <button onClick={handleSubmit} style={buttonStyles2}>Submit and predict</button>
+                            {/* <button onClick={handleSubmitWithPrevious} style={buttonStyles2}>Submit and predict with previous obesrvations</button> */}
+                        </div>
 
-                    {/* Predict button */}
-                    <div style={{ "display": "flex", "alignItems": "center", "justifyContent": "center", "marginTop": "60px" }}>
-                        <button onClick={handleSubmit} style={buttonStyles2}>Submit and predict</button>
-                        {/* <button onClick={handleSubmitWithPrevious} style={buttonStyles2}>Submit and predict with previous obesrvations</button> */}
-                    </div>
+                        <div style={{ "display": "flex", "alignItems": "center", "justifyContent": "center", "marginTop": "60px", "marginBottom": "30px" }}>
+                            {data && selectedTab === 0 &&
+                                <Grid item className={classes.buttonGrid} >
 
-                    <div style={{ "display": "flex", "alignItems": "center", "justifyContent": "center", "marginTop": "60px", "marginBottom": "30px" }}>
-                        {data && selectedTab === 0 &&
-                            <Grid item className={classes.buttonGrid} >
+                                    <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
+                                        Clear
+                                    </ColorButton>
+                                </Grid>}
 
-                                <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
-                                    Clear
-                                </ColorButton>
-                            </Grid>}
+                            {disease && selectedTab === 0 &&
+                                <Grid item className={classes.buttonGrid} >
 
-                        {disease && selectedTab === 0 &&
-                            <Grid item className={classes.buttonGrid} >
+                                    <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
+                                        {disease}
+                                    </ColorButton>
+                                </Grid>}
 
-                                <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
-                                    {disease}
-                                </ColorButton>
-                            </Grid>}
+                            {possibleDiseases && selectedTab === 0 &&
+                                <Grid item className={classes.buttonGrid} >
 
-                        {possibleDiseases && selectedTab === 0 &&
-                            <Grid item className={classes.buttonGrid} >
-
-                                <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
-                                    {possibleDiseases.map((disease, index) => (
-                                        <React.Fragment key={index}>
-                                            {index > 0 && ', '}
-                                            {disease}
-                                        </React.Fragment>
-                                    ))}
-                                </ColorButton>
-                            </Grid>}
-                    </div>
-                </Grid>}
-            </Container >
-        </React.Fragment >
-    );
+                                    <ColorButton variant="contained" className={classes.clearButton} color="primary" component="span" size="large" onClick={clearData} startIcon={<Clear fontSize="large" />}>
+                                        {possibleDiseases.map((disease, index) => (
+                                            <React.Fragment key={index}>
+                                                {index > 0 && ', '}
+                                                {disease}
+                                            </React.Fragment>
+                                        ))}
+                                    </ColorButton>
+                                </Grid>}
+                        </div>
+                    </Grid>}
+                </Container >
+            </React.Fragment >
+        );
+    }
 };
 
 export default Questions

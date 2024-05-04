@@ -6,6 +6,7 @@ import bg2 from './../tomato-bg2.jpg';
 import bg3 from './../tomato-bg3.jpg';
 import bg4 from './../green-bg.jpg';
 import bg5 from './../seedling-bg.jpg';
+import bg6 from './../home_image.jpg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,8 +50,15 @@ const useStyles = makeStyles((theme) => ({
   section2: {
     backgroundColor: 'white',
     padding: theme.spacing(5),
-    marginBottom: '50px'
+    marginBottom: '30px'
   },
+
+  section4: {
+    backgroundColor: 'white',
+    padding: theme.spacing(5),
+    marginBottom: '30px'
+  },
+
   section2Title: {
     marginBottom: '10px',
     padding: '10px',
@@ -69,19 +77,29 @@ const useStyles = makeStyles((theme) => ({
   },
 
   section3: {
-    backgroundImage: `url(${bg5})`,
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
+    display: 'flex',
+    alignItems: 'center',
     padding: theme.spacing(5),
-    marginBottom: theme.spacing(2),
+    marginTop: '10px',
+    marginBottom: '40px',
     height: "50%",
   },
+  section3Content: {
+    width: '70%', // Take up 75% of the total width
+  },
+  imageContainer: {
+    width: '30%', // Take up 25% of the total width
+    textAlign: 'right', // Align image to right
+  },
+
   section3Title: {
     marginBottom: '10px',
     padding: '10px',
     fontFamily: 'Poppins',
-    maxWidth: '60%',
+    maxWidth: '100%',
   },
+
+
 
   aboutContainer: {
     width: '100%',
@@ -227,22 +245,36 @@ const HomePage = ({ changeSelectTab }) => {
         </Grid>
       </Box>
 
-      <Box className={classes.section3}>
-        <Typography variant="h4" gutterBottom className={classes.section3Title}>
-          Our Features
-        </Typography>
-        <Typography variant="h6" gutterBottom className={classes.section3Title}>
-          Know more about Tomato disease symptoms.
-        </Typography>
-        <Typography variant="h6" gutterBottom className={classes.section3Title}>
-          Know more about Tomato diseases.
-        </Typography>
-        <Typography variant="h6" gutterBottom className={classes.section3Title}>
-          Diagnose the Tomato plant using images and extra symptoms.
-        </Typography>
-      </Box>
 
-      <Box className={classes.section2}>
+      <div className={classes.section3}>
+        <div className={classes.section3Content}>
+          <Typography variant="h4" gutterBottom className={classes.section3Title}>
+            Features of AgrOM
+          </Typography>
+          <ul>
+            <li>
+              <Typography variant="h6" gutterBottom className={classes.section3Title}>
+                Know more about Tomato disease symptoms.
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="h6" gutterBottom className={classes.section3Title}>
+                Know more about Tomato diseases.
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="h6" gutterBottom className={classes.section3Title}>
+                Diagnose the Tomato plant using images and extra symptoms.
+              </Typography>
+            </li>
+          </ul>
+        </div>
+        <div className={classes.imageContainer}>
+          <img src={bg6} alt="Background" style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }} />
+        </div>
+      </div>
+
+      <Box className={classes.section4}>
         <section id="final" data-aos="fade-down" className={classes.finalSection}>
           <Typography variant="subtitle1" className={classes.strongText}>
             What's Next?

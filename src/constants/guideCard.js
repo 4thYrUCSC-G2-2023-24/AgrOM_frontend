@@ -25,5 +25,11 @@ export const cardData = [
   { id: 15, image: './images/tan_spot.jpg', title: 'Spot with tan grey center', subtitle: 'The special type of spot that is black and has a grey color center as shown in the above figure' },
   { id: 16, image: './images/cracks.png', title: 'Leaf spots with crack center', subtitle: 'The special type of spot sympotom that has crack in the middle in the leaves as shown in above figure' },
   { id: 17, image: './images/crack_center.png', title: 'Fruit rings with crack center', subtitle: 'The special type of ring sympotom that has crack in the middle in the fruits as shown in above figure' },
+  { id: 18, image: './images/yellowing.jpg', title: 'Yellowing of Leaf', subtitle: 'Description of Spot' },
+  { id: 19, image: './images/webbing.png', title: 'Webbing of Leaf', subtitle: 'Description of Spot' },
+
+
+
+
 
 ];
