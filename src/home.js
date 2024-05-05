@@ -536,7 +536,8 @@ export const Home = () => {
     setSegmentedImage(false);
     setCurrentStep(0);
     setLeafDetectionErrorCount(0);
-    setTempRespData(null);    setUserAnswers({});
+    setTempRespData(null);    
+    setUserAnswers({});
     setCurrentQuestion(0);
     setSelectedOption(null);
     setFlag(0);
@@ -583,37 +584,37 @@ export const Home = () => {
         return;
       }
       if(currentStep === 0){      
-        setIsloading(true);
+        setIsLoading(true);
         try{
           await uploadProcessImageFile();
         } catch (error) {
           setErrorMessage('Error uploading image: '+ error.message);
           setOpenSnackbar(true);
         } finally {
-          setIsloading(false);
+          setIsLoading(false);
         }
       }
       else if(currentStep === 1){
-        setIsloading(true);
+        setIsLoading(true);
         try{
           await uploadSegmentLeaves();
         } catch (error) {
           setErrorMessage('Error uploading image: ', error.message);
           setOpenSnackbar(true);
         } finally {
-          setIsloading(false);
+          setIsLoading(false);
         }
 
       }
       else if(currentStep === 2){
-        setIsloading(true);
+        setIsLoading(true);
         try{
           await uploadDetectSymptoms();
         } catch (error) {
           setErrorMessage('Error uploading image: ', error.message);
           setOpenSnackbar(true);
         } finally {
-          setIsloading(false);
+          setIsLoading(false);
         }  
       }
       else if(currentStep === 3){
@@ -718,9 +719,6 @@ export const Home = () => {
     console.log(symptom_set)
     var x = sendFileAndExtraSymptoms(symptom_set);
   };
-
-
-
 
   const quizContainerStyle = {
     maxWidth: '800px',
@@ -895,7 +893,6 @@ export const Home = () => {
                   Go Back
                 </ColorButton>
                 <Questions />
-
               </Grid>
             }
 
@@ -1167,6 +1164,7 @@ export const Home = () => {
                   />
                 </CardContent>}
               </Card>
+
               {flag == 0 ?
                 <div style={{ "height": "850px", "marginTop": "100px", "paddingTop": "50px", "background": "#90EE90", "borderRadius": "10px" }}>
                   <div style={quizContainerStyle}>
@@ -1207,7 +1205,6 @@ export const Home = () => {
                     </div>
                   </div>
                 </div>
-
                 :
                 <div style={{ "height": "850px", "marginTop": "100px", "paddingTop": "50px", "background": "#90EE90", "borderRadius": "10px" }}>
                   <div style={quizContainerStyle}>
