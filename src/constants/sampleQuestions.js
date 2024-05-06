@@ -35,7 +35,23 @@ export const sampleLeafQuestions = [{
     labels: ['yellow', 'white', 'no'],
     images: ['./images/Spots.PNG', './images/white_halo.jpg'],
 
-}]
+},
+{
+    uid: 12,
+    question: 'Are there any cracks in the middle of the spots?',
+    options: ['Yes', 'No'],
+    labels: ['Yes', 'No'],
+    images: [crack],
+},
+{
+    uid: 14,
+    question: 'Are most of tomato leaves showing curling symptom?',
+    options: ['Yes', 'No'],
+    labels: ['Yes', 'No'],
+    images: [curl],
+},
+
+]
 
 
 export const sampleStemQuestions = [{
@@ -70,7 +86,7 @@ export const sampleFruitQuestions = [{
     question: 'Are there any halos in the fruit?',
     options: ['Yellow', 'No'],
     labels: ['yellow', 'no'],
-    images: ['./images/halo.png', noimage],
+    images: ['./images/halo.png'],
 }]
 
 export const sampleSpecialQuestions = [{
@@ -80,46 +96,25 @@ export const sampleSpecialQuestions = [{
     labels: ['odor', 'no'],
 },
 {
-    uid: 10,
-    question: 'Is there any cross section of symptoms appearing when you cut stems?',
-    options: ['Yes', 'No'],
-    labels: ['Yes', 'No'],
-    images: ['./images/cross_section.png', noimage]
-},
-{
     uid: 11,
-    question: 'Is there any ooze liquid presence in tomato fruit',
+    question: 'Is there any ooze liquid presence?',
     options: ['Yes', 'No'],
     labels: ['Yes', 'No'],
-    images: ['./images/ooze.png', noimage]
-},
-{
-    uid: 12,
-    question: 'Are there any cracks in the middle of the spots?',
-    options: ['Yes', 'No'],
-    labels: ['Yes', 'No'],
-    images: [crack, noimage],
+    images: ['./images/ooze.jpg']
 },
 {
     uid: 13,
     question: 'Is your plant showing wilting',
     options: ['Yes', 'No'],
     labels: ['wilting', 'No'],
-    images: [wilt, noimage]
-},
-{
-    uid: 14,
-    question: 'Are most of tomato leaves showing curling symptom?',
-    options: ['Yes', 'No'],
-    labels: ['Yes', 'No'],
-    images: [curl, noimage],
+    images: [wilt]
 },
 {
     uid: 15,
     question: 'Are there any fungus symptom?',
     options: ['White fungus', 'Black/Brown fungus on leaves', 'Olive coloured fungus', 'No'],
     labels: ['white', 'black', 'olive', 'No'],
-    images: ['./images/Fungus.png', './images/black.jpg', './images/olive.png', noimage],
+    images: ['./images/Fungus.png', './images/black.jpg', './images/olive.png'],
 },
 {
     uid: 16,
