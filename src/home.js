@@ -22,7 +22,7 @@ import Questions from "./questions";
 import { containerStyles, containerStyles2, labelStyles, buttonStyles } from "./assets/styles/home";
 import { PredictOption } from "./pages/predictOption";
 import HomePage from "./pages/homePage";
-import { initialQuestion, sampleLeafQuestions, sampleFruitQuestions, sampleStemQuestions, sampleSpecialQuestions } from "./constants/sampleQuestions";
+import { initialQuestion, sampleLeafQuestions, sampleFruitQuestions, sampleStemQuestions, sampleSpecialQuestions, sampleFlowerQuestions } from "./constants/sampleQuestions";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -275,7 +275,8 @@ export const Home = () => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleOptionClick = (option, label) => {
-
+    console.log(option)
+    console.log(label)
     if (userAnswers[currentQuestion]) {
       if (userAnswers[currentQuestion].label !== label) {
         setUserAnswers(prevAnswers => ({
@@ -290,6 +291,8 @@ export const Home = () => {
         }));
         setSelectedOption(null);
       }
+
+      console.log(userAnswers);
     } else {
       setUserAnswers(prevAnswers => ({
         ...prevAnswers,
@@ -325,6 +328,9 @@ export const Home = () => {
   };
 
   const handleTypeOptionClick = (option, label) => {
+
+    console.log(option);
+    console.log(label);
     // Check if the option is already selected
     const isOptionSelected = selectedOptions.includes(label);
 
@@ -352,6 +358,9 @@ export const Home = () => {
           break;
         case 'fruit_symp':
           questionsToAdd = sampleFruitQuestions.map((question) => ({ ...question, id: idCounter++ }));
+          break;
+        case 'flower_symp':
+          questionsToAdd = sampleFlowerQuestions.map((question) => ({ ...question, id: idCounter++ }));
           break;
         case 'special_symp':
           questionsToAdd = sampleSpecialQuestions.map((question) => ({ ...question, id: idCounter++ }));
@@ -449,13 +458,13 @@ export const Home = () => {
     const symptomNames = [
       "hasLeafSymptom",
       "hasLeafSymptomColour",
-      "hasLeafHalo",
+      "hasLeafHaloColour",
       "hasStemSymptom",
       "hasStemSymptomColor",
       "hasFruitSymptom",
       "hasFruitSymptomColour",
       "hasFruitHalo",
-      "hasBadOdor",
+      "hasOdorSymptom",
       "hasCrossSection",
       "hasOozeLiquid",
       "hasCracks",
@@ -463,6 +472,7 @@ export const Home = () => {
       "hasCurling",
       "hasFungalColour",
       "hasWebbing",
+      "hasFlowerSymptom"
     ];
     var symptom_set = {}
     for (var i = 0; i < questions.length; i++) {

@@ -7,7 +7,7 @@ import { Paper, CardActionArea, CardMedia, Grid, Button, CircularProgress } from
 import { common } from '@material-ui/core/colors';
 import Clear from '@material-ui/icons/Clear';
 import { sampleQuestions } from "./constants/sampleQuestions";
-import { initialQuestion, sampleLeafQuestions, sampleStemQuestions, sampleFruitQuestions, sampleSpecialQuestions } from "./constants/sampleQuestions";
+import { initialQuestion, sampleLeafQuestions, sampleStemQuestions, sampleFruitQuestions, sampleSpecialQuestions, sampleFlowerQuestions } from "./constants/sampleQuestions";
 
 
 
@@ -254,6 +254,9 @@ const Questions = () => {
                 case 'fruit_symp':
                     questionsToAdd = sampleFruitQuestions.map((question) => ({ ...question, id: idCounter++ }));
                     break;
+                case 'flower_symp':
+                    questionsToAdd = sampleFlowerQuestions.map((question) => ({ ...question, id: idCounter++ }));
+                    break;
                 case 'special_symp':
                     questionsToAdd = sampleSpecialQuestions.map((question) => ({ ...question, id: idCounter++ }));
                     break;
@@ -479,13 +482,13 @@ const Questions = () => {
         const symptomNames = [
             "hasLeafSymptom",
             "hasLeafSymptomColour",
-            "hasLeafHalo",
+            "hasLeafHaloColour",
             "hasStemSymptom",
             "hasStemSymptomColor",
             "hasFruitSymptom",
             "hasFruitSymptomColour",
             "hasFruitHalo",
-            "hasBadOdor",
+            "hasOdorSymptom",
             "hasCrossSection",
             "hasOozeLiquid",
             "hasCracks",
@@ -493,6 +496,7 @@ const Questions = () => {
             "hasCurling",
             "hasFungalColour",
             "hasWebbing",
+            "hasFlowerSymptom"
         ];
         var symptom_set = {}
         for (var i = 0; i < questions.length; i++) {
