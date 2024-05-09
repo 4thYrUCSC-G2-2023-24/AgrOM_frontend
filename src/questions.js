@@ -7,7 +7,7 @@ import { Paper, CardActionArea, CardMedia, Grid, Button, CircularProgress } from
 import { common } from '@material-ui/core/colors';
 import Clear from '@material-ui/icons/Clear';
 import { sampleQuestions } from "./constants/sampleQuestions";
-import { initialQuestion, sampleLeafQuestions, sampleStemQuestions, sampleFruitQuestions, sampleSpecialQuestions } from "./constants/sampleQuestions";
+import { initialQuestion, sampleLeafQuestions, sampleStemQuestions, sampleFruitQuestions, sampleSpecialQuestions, sampleFlowerQuestions } from "./constants/sampleQuestions";
 
 
 
@@ -66,8 +66,9 @@ const useStyles = makeStyles((theme) => ({
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         backgroundSize: 'cover',
-        height: "150vh",
+        height: "auto",
         marginTop: "8px",
+        marginBottom: "16px",
     },
     input: {
         display: 'none',
@@ -254,6 +255,9 @@ const Questions = () => {
                 case 'fruit_symp':
                     questionsToAdd = sampleFruitQuestions.map((question) => ({ ...question, id: idCounter++ }));
                     break;
+                case 'flower_symp':
+                    questionsToAdd = sampleFlowerQuestions.map((question) => ({ ...question, id: idCounter++ }));
+                    break;
                 case 'special_symp':
                     questionsToAdd = sampleSpecialQuestions.map((question) => ({ ...question, id: idCounter++ }));
                     break;
@@ -361,8 +365,8 @@ const Questions = () => {
         borderRadius: '10px',
         backgroundColor: '#fff',
         boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-        width: '800px',
-        height: '775px',
+        width: 'auto',
+        height: 'auto',
         overflowY: 'auto'
     };
 
@@ -479,13 +483,13 @@ const Questions = () => {
         const symptomNames = [
             "hasLeafSymptom",
             "hasLeafSymptomColour",
-            "hasLeafHalo",
+            "hasLeafHaloColour",
             "hasStemSymptom",
             "hasStemSymptomColor",
             "hasFruitSymptom",
             "hasFruitSymptomColour",
             "hasFruitHalo",
-            "hasBadOdor",
+            "hasOdorSymptom",
             "hasCrossSection",
             "hasOozeLiquid",
             "hasCracks",
@@ -493,6 +497,7 @@ const Questions = () => {
             "hasCurling",
             "hasFungalColour",
             "hasWebbing",
+            "hasFlowerSymptom"
         ];
         var symptom_set = {}
         for (var i = 0; i < questions.length; i++) {
@@ -568,17 +573,6 @@ const Questions = () => {
     } else {
         return (
             <React.Fragment>
-                {isLoading && (
-                    <div style={{
-                        position: 'fixed',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        zIndex: 1000,
-                    }}>
-                        <CircularProgress style={{ color: '#be6a77' }} />
-                    </div>
-                )}
                 <Container maxWidth={false} className={classes.mainContainer} disableGutters={true}>
                     {selectedTab === 0 && <Grid item xs={12}>
                         <div>
@@ -655,7 +649,7 @@ const Questions = () => {
 
                         {/* Predict button */}
                         <div style={{ "display": "flex", "alignItems": "center", "justifyContent": "center", "marginTop": "60px" }}>
-                            <button onClick={handleSubmit} style={buttonStyles2}>Submit and predict</button>
+                            <button onClick={handleSubmit} style={buttonStyles2}>{isLoading ? <CircularProgress /> : "Submit and Predict"}</button>
                             {/* <button onClick={handleSubmitWithPrevious} style={buttonStyles2}>Submit and predict with previous obesrvations</button> */}
                         </div>
 
