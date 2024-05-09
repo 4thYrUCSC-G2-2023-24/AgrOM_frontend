@@ -10,7 +10,7 @@ import fruit_ring from './../fruit_rings.jpg'
 import fruit_lesion from './../fruit_lesion.jpg'
 import ring_crack from './../crack_center.png'
 import yellowing from './../yellowing.jpg'
-
+import tan_center from './../tan_center_spot.jpg'
 
 export const sampleQuestions = [{
 }]
@@ -18,9 +18,9 @@ export const sampleQuestions = [{
 export const sampleLeafQuestions = [{
     uid: 1,
     question: 'What is the type of Leaf symptom?',
-    options: ['Lesion', 'Spots', 'Concentric ring', 'Yellowing'],
-    labels: ['lesions', 'spots', 'rings', 'yellowing'],
-    images: ["./images/Lesion.PNG", './images/Spots.PNG', './images/rings.jpg', yellowing],
+    options: ['Lesion', 'Spots', 'Concentric ring', 'Yellowing', 'Spot with tan center'],
+    labels: ['lesions', 'spots', 'rings', 'yellowing', 'tan_center_spots'],
+    images: ["./images/Lesion.PNG", './images/Spots.PNG', './images/rings.jpg', yellowing, tan_center],
 },
 {
     uid: 2,
@@ -35,7 +35,23 @@ export const sampleLeafQuestions = [{
     labels: ['yellow', 'white', 'no'],
     images: ['./images/Spots.PNG', './images/white_halo.jpg'],
 
-}]
+},
+{
+    uid: 12,
+    question: 'Are there any cracks in the middle of the spots?',
+    options: ['Yes', 'No'],
+    labels: ['Yes', 'No'],
+    images: [crack],
+},
+{
+    uid: 14,
+    question: 'Are most of tomato leaves showing curling symptom?',
+    options: ['Yes', 'No'],
+    labels: ['Yes', 'No'],
+    images: [curl],
+},
+
+]
 
 
 export const sampleStemQuestions = [{
@@ -70,56 +86,35 @@ export const sampleFruitQuestions = [{
     question: 'Are there any halos in the fruit?',
     options: ['Yellow', 'No'],
     labels: ['yellow', 'no'],
-    images: ['./images/halo.png', noimage],
+    images: ['./images/halo.png'],
 }]
 
 export const sampleSpecialQuestions = [{
     uid: 9,
     question: 'Is there a bad odor coming out from the plant?',
     options: ['Yes', 'No'],
-    labels: ['Yes', 'No'],
-},
-{
-    uid: 10,
-    question: 'Is there any cross section of symptoms appearing when you cut stems?',
-    options: ['Yes', 'No'],
-    labels: ['Yes', 'No'],
-    images: ['./images/cross_section.png', noimage]
+    labels: ['odor', 'no'],
 },
 {
     uid: 11,
-    question: 'Is there any ooze liquid presence in tomato fruit',
+    question: 'Is there any ooze liquid presence?',
     options: ['Yes', 'No'],
     labels: ['Yes', 'No'],
-    images: ['./images/ooze.png', noimage]
-},
-{
-    uid: 12,
-    question: 'Are there any cracks in the middle of the spots?',
-    options: ['Yes', 'No'],
-    labels: ['Yes', 'No'],
-    images: [crack, noimage],
+    images: ['./images/ooze.jpg']
 },
 {
     uid: 13,
     question: 'Is your plant showing wilting',
     options: ['Yes', 'No'],
     labels: ['wilting', 'No'],
-    images: [wilt, noimage]
-},
-{
-    uid: 14,
-    question: 'Are most of tomato leaves showing curling symptom?',
-    options: ['Yes', 'No'],
-    labels: ['Yes', 'No'],
-    images: [curl, noimage],
+    images: [wilt]
 },
 {
     uid: 15,
     question: 'Are there any fungus symptom?',
-    options: ['White fluffy fungus', 'White Powdery fungus on leafs', 'Black/Brown fungus on leaves', 'Olive coloured fungus', 'No'],
-    labels: ['white', 'powdery', 'black', 'olive', 'No'],
-    images: ['./images/Fungus.png', './images/powdery.png', './images/black.jpg', './images/olive.png', noimage],
+    options: ['White fungus', 'Black/Brown fungus on leaves', 'Olive coloured fungus', 'No'],
+    labels: ['white', 'black', 'olive', 'No'],
+    images: ['./images/Fungus.png', './images/black.jpg', './images/olive.png'],
 },
 {
     uid: 16,
@@ -131,12 +126,17 @@ export const sampleSpecialQuestions = [{
 ]
 
 
+export const sampleFlowerQuestions = [{
+    uid: 17,
+    question: 'Is there flower dropping observed?',
+    options: ['Yes', 'No'],
+    labels: ['dropping', 'no'],
+}
+]
 
 
 export const initialQuestion = {
     question: 'What kind of Symptom you are observing? (Select one or more)',
-    options: ['Leaf symptom', 'Stem symptom', 'Fruit symptom', 'Special Symptoms'],
-    labels: ['leaf_symp', 'stem_symp', 'fruit_symp', 'special_symp'],
+    options: ['Leaf symptom', 'Stem symptom', 'Fruit symptom', 'Flower symptom', 'Special symptom (Fungal Symptom, Odor symptom, Webbing, Wilting)'],
+    labels: ['leaf_symp', 'stem_symp', 'fruit_symp', 'flower_symp', 'special_symp'],
 }
-
-
