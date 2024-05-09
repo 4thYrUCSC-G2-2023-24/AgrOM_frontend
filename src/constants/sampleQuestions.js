@@ -11,6 +11,7 @@ import fruit_lesion from './../fruit_lesion.jpg'
 import ring_crack from './../crack_center.png'
 import yellowing from './../yellowing.jpg'
 import tan_center from './../tan_center_spot.jpg'
+import tan_center from './../tan_center_spot.jpg'
 
 export const sampleQuestions = [{
 }]

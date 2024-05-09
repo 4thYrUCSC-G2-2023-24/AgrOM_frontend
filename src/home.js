@@ -527,6 +527,9 @@ const handleCircleButtonClick = (index) => {
 };
 
   const handleTypeOptionClick = (option, label) => {
+
+    console.log(option);
+    console.log(label);
     // Check if the option is already selected
     const isOptionSelected = selectedOptions.includes(label);
 
