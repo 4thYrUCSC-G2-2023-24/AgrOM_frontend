@@ -20,7 +20,6 @@ import { Guide } from "./pages/guide";
 import Questions from "./questions";
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -31,7 +30,7 @@ import { containerStyles, containerStyles2, labelStyles, buttonStyles, buttonSty
 import { PredictOption } from "./pages/predictOption";
 import HomePage from "./pages/homePage";
 import { CenterFocusStrong } from "@material-ui/icons";
-import { initialQuestion, sampleLeafQuestions, sampleFruitQuestions, sampleStemQuestions, sampleSpecialQuestions } from "./constants/sampleQuestions";
+import { initialQuestion, sampleLeafQuestions, sampleFruitQuestions, sampleStemQuestions, sampleSpecialQuestions, sampleFlowerQuestions } from "./constants/sampleQuestions";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -179,6 +178,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
+
 export const Home = () => {
   const classes = useStyles();
   const [selectedFile, setSelectedFile] = useState();
@@ -200,7 +200,7 @@ export const Home = () => {
   const [detectedLeavesCount, setDetectedLeavesCount] = useState();
   const [detectedSymtoms, setDetectedSymtoms] = useState([]);
   const [possibleDiseasesBaseOnSymptoms, setPossibleDiseasesBaseOnSymptoms] = useState();
-  const [possibleDiseasesAfterSegmentation, setPossibleDiseasesAfterSegmentation] = useState();
+  const [possibleDiseasesAfterSegmentation, setPossibleDiseasesAfterSegmentation] = useState([]);
 
   const [predictOption, setPredictOption] = useState(0);
   const [predictStep, setPredictStep] = useState(0);
@@ -225,6 +225,8 @@ export const Home = () => {
   const handlePredictStep = async (step) => {
     setPredictStep(step);
   }
+
+  
 
   let confidence = 0;
 
@@ -286,7 +288,7 @@ export const Home = () => {
 
     }
   }
-
+  
   const uploadDetectSymptoms = async() => {
     if (image) {
       let formData = new FormData();
@@ -303,6 +305,57 @@ export const Home = () => {
         setDetectedSymtomsImageFile(createImageUrl(res.data['boundingbox_image']))
         setDetectedSymtoms(res.data['symptoms_detected'])
         setDetectedSymtomsImage(true)
+        handleTypeOptionClick('Leaf symptom', 'leaf_symp')
+
+        // const updateAnswer = (questionId, uid, label) => {
+        //   setUserAnswers(prevUserAnswers => ({
+        //     ...prevUserAnswers,
+        //     [questionId]: uid // Assuming questionId is a unique identifier for the question
+        //   }));
+        // };
+        
+        // for (let i = 0; i < items.length; i++) {
+        //   console.log(symptom);
+        //   let label = detectedSymtoms[key]
+        //   let label_split = label.split(" ")
+        //   let symptom = label_split[1]
+        //   let color = label_split[0]
+        //   updateAnswer(i, uid, Option) 
+        // }
+        // updateAnswer(index, uid, Option)
+        // console.log(userAnswers)
+
+
+        
+        // let label = symp.split(" ")
+        // let symptom = splitValue[1]
+        // let color = splitValue[0]
+        
+        // symptom = splitValue[1]
+        // color = splitValue[0]
+        
+
+        // var index1 = sampleLeafQuestions[0].labels.indexOf(splitValue[1])
+        // var Option =  sampleLeafQuestions[0].options[index1]
+        // var uid = sampleLeafQuestions[0].uid
+
+        // const updateAnswer = (questionId, uid, label) => {
+        //   setUserAnswers(prevUserAnswers => ({
+        //     ...prevUserAnswers,
+        //     [questionId]: uid // Assuming questionId is a unique identifier for the question
+        //   }));
+        // };
+        // updateAnswer(uid, Option)
+
+        // console.log(userAnswers)
+
+        // setSelectedOption(splitValue[1])
+        // console.log(index1)
+        // console.log(Option)
+        // var index2 = sampleLeafQuestions[1].labels.indexOf(splitValue[0])
+        // var Option2 =  sampleLeafQuestions[1].options[index2]
+        
+        // handleOptionClick(Option2, splitValue[0])
         setCurrentStep(currentStep + 1); // Move to the next step
       }
 
@@ -414,15 +467,14 @@ export const Home = () => {
 
   }
 
-
   const [questions, setQuestions] = useState([]);
-
   const [userAnswers, setUserAnswers] = useState({});
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleOptionClick = (option, label) => {
-
+    console.log(option)
+    console.log(label)
     if (userAnswers[currentQuestion]) {
       if (userAnswers[currentQuestion].label !== label) {
         setUserAnswers(prevAnswers => ({
@@ -437,6 +489,8 @@ export const Home = () => {
         }));
         setSelectedOption(null);
       }
+
+      console.log(userAnswers);
     } else {
       setUserAnswers(prevAnswers => ({
         ...prevAnswers,
@@ -459,17 +513,18 @@ export const Home = () => {
 
   const handlePreviousQuestion = () => {
     if (currentQuestion > 0) {
-      setCurrentQuestion(currentQuestion - 1);
-      setSelectedOption(userAnswers[currentQuestion - 1]);
+        setCurrentQuestion(currentQuestion - 1);
+        setSelectedOption(userAnswers[currentQuestion - 1].label);
     }
-  };
+};
 
-  //relates to circular button
-  const handleCircleButtonClick = (index) => {
+//relates to circular button
+const handleCircleButtonClick = (index) => {
     setCurrentQuestion(index);
-    setSelectedOption(userAnswers[index]);
+    const selectedAnswer = userAnswers[index];
+    setSelectedOption(selectedAnswer ? selectedAnswer.label : null);
 
-  };
+};
 
   const handleTypeOptionClick = (option, label) => {
     // Check if the option is already selected
@@ -499,6 +554,9 @@ export const Home = () => {
           break;
         case 'fruit_symp':
           questionsToAdd = sampleFruitQuestions.map((question) => ({ ...question, id: idCounter++ }));
+          break;
+        case 'flower_symp':
+          questionsToAdd = sampleFlowerQuestions.map((question) => ({ ...question, id: idCounter++ }));
           break;
         case 'special_symp':
           questionsToAdd = sampleSpecialQuestions.map((question) => ({ ...question, id: idCounter++ }));
@@ -549,18 +607,17 @@ export const Home = () => {
     'Detect Disease Leaves',
     'Segment Disease Leaves',
     'Detect Disease Symptoms',
-    'Answer Questions On Extra Symptoms',
-    'Summary',
+    'Answer Questions On Extra Symptoms'
   ];
 
   const [currentStep, setCurrentStep] = useState(0);
   const total_steps = steps.length; // Total number of steps
 
   const getButtonText = () => {
-    if (currentStep < total_steps) {
+    if (currentStep < (total_steps-1)) {
       return "Next"; // Show "Next" until the final step
     } else {
-      return "Submit"; // Show "Submit" on the final step
+      return "Submit and Predict"; // Show "Submit" on the final step
     }
   };
 
@@ -577,7 +634,7 @@ export const Home = () => {
 
   const handleNextStep = async (event) => {
     // Your logic for handling each step
-    if (currentStep < total_steps) {
+    if (currentStep < (total_steps-1)) {
       if (!image) {
         setErrorMessage('Please upload an image before continuing.');
         setOpenSnackbar(true);
@@ -604,7 +661,6 @@ export const Home = () => {
         } finally {
           setIsLoading(false);
         }
-
       }
       else if(currentStep === 2){
         setIsLoading(true);
@@ -620,10 +676,6 @@ export const Home = () => {
       else if(currentStep === 3){
         setCurrentStep(currentStep + 1);
       }
-      else if(currentStep === 4){
-        setCurrentStep(currentStep + 1);
-      }
-      
     } else {
       handleSubmit();
     }
@@ -688,13 +740,13 @@ export const Home = () => {
     const symptomNames = [
       "hasLeafSymptom",
       "hasLeafSymptomColour",
-      "hasLeafHalo",
+      "hasLeafHaloColour",
       "hasStemSymptom",
       "hasStemSymptomColor",
       "hasFruitSymptom",
       "hasFruitSymptomColour",
       "hasFruitHalo",
-      "hasBadOdor",
+      "hasOdorSymptom",
       "hasCrossSection",
       "hasOozeLiquid",
       "hasCracks",
@@ -702,6 +754,7 @@ export const Home = () => {
       "hasCurling",
       "hasFungalColour",
       "hasWebbing",
+      "hasFlowerSymptom"
     ];
     var symptom_set = {}
     for (var i = 0; i < questions.length; i++) {
@@ -728,8 +781,8 @@ export const Home = () => {
     borderRadius: '10px',
     backgroundColor: '#fff',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-    width: '800px',
-    height: '725px',
+    width: 'auto',
+    height: 'auto',
     overflowY: 'auto',
   };
 
@@ -860,17 +913,6 @@ export const Home = () => {
           <Avatar src={logo} className={classes.logo}></Avatar>
         </Toolbar>
       </AppBar>
-      {isLoading && (
-        <div style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          zIndex: 1000,
-        }}>
-          <CircularProgress style={{ color: '#be6a77' }} />
-        </div>
-      )}
       {selectedTab === 0 && <HomePage changeSelectTab={setSelectedTab} />}
       {selectedTab !== 0 &&
         <Container maxWidth={false} className={classes.mainContainer} disableGutters={true}>
@@ -1015,7 +1057,7 @@ export const Home = () => {
                     }
                   </Card>
 
-                  <Card className={`${classes.imageCard} ${!image ? classes.imageCardEmpty : ''}`} style={{ maxHeight: "350px", margin: '10px', width: '100%' }}>
+                  <Card className={`${classes.imageCard} ${!segmentedImage ? classes.imageCardEmpty : ''}`} style={{ maxHeight: "350px", margin: '10px', width: '100%' }}>
                     {segmentedImage && <CardActionArea>
                       <CardMedia
                         className={classes.media}
@@ -1032,9 +1074,9 @@ export const Home = () => {
                   <Typography variant="h6" gutterBottom>
                     Segmentation Mask and Segmented Image of disease leaves
                   </Typography>
-                  <Typography variant="h5" gutterBottom>
+                  {/* <Typography variant="h5" gutterBottom>
                     Predicted Disease: {possibleDiseasesAfterSegmentation} 
-                  </Typography>
+                  </Typography> */}
                 </Box>
               </Box>}
 
@@ -1056,13 +1098,52 @@ export const Home = () => {
                   <Typography variant="h6" gutterBottom>
                     Symptoms detection model detect {detectedSymtoms} in disease leaves
                   </Typography>
-                  <Typography variant="h5" gutterBottom>
+                  {/* <Typography variant="h5" gutterBottom>
                     Expected diseases are: 
-                  </Typography>
+                  </Typography> */}
                 </Box>
               </Box>}
 
-              {currentStep===4 && <div style={{ "height": "850px", "paddingTop": "50px", "borderRadius": "10px" }}>
+              {currentStep===4 && <div style={{ "height": "auto", "paddingTop": "50px", "borderRadius": "10px" }}>
+              {flag == 0 ?
+                <div style={quizContainerStyle}>
+                  {/*Questions and Answers */}
+                  <div style={activeQuestionStyle}>
+                    <p>{initialQuestion.question}</p>
+                    <ul>
+                      {initialQuestion.options.map((option, optionIndex) => (
+                        <li
+                          key={optionIndex}
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            padding: '10px',
+                            border: '1px solid #ccc',
+                            borderRadius: '5px',
+                            marginBottom: '8px',
+                            cursor: 'pointer',
+                            transition: 'background-color 0.3s',
+                            ...(selectedOptions.includes(initialQuestion.labels[optionIndex]) ? selectedOptionStyle : optionStyle)
+                          }}
+                          onClick={() => handleTypeOptionClick(option, initialQuestion.labels[optionIndex])}
+                        >
+
+                          {option}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div style={buttonContainerStyle}>
+                    <button
+                      style={Object.assign({}, nextButtonStyle, currentQuestion === questions.length - 1 && hoverButtonStyle)}
+                      onClick={handleTypeSubmission}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </div>
+                :  
                 <div style={quizContainerStyle}>
                   {/* Circular buttons */}
                   <div style={circleButtonContainerStyle}>
@@ -1130,158 +1211,11 @@ export const Home = () => {
                     </button>
                   </div>
                 </div>
-              </div>}
-
-            </Grid>}
-
-            {selectedTab === 1 && predictOption === 1 && predictStep === 2 && <Grid item xs={12}>
-              <ColorButton variant="contained" color="primary" component="div" onClick={(e) => { setPredictOption(0) }} >
-                Go Back
-              </ColorButton>
-
-              <Stepper activeStep={1} alternativeLabel className={classes.stepper}>
-                {steps.map((label) => (
-                  <Step key={label} >
-                    <StepLabel className={classes.step}>{label}</StepLabel>
-                  </Step>
-                ))}
-              </Stepper>
-
-              <Card className={`${classes.imageCard} ${!image ? classes.imageCardEmpty : ''}`} style={{ minHeight: "350px" }}>
-                {image && <CardActionArea>
-                  <CardMedia
-                    className={classes.media}
-                    image={preview}
-                    component="image"
-                    title="Leaf symptom"
-                  />
-                </CardActionArea>}
-                {!image && <CardContent className={classes.content}>
-                  <DropzoneArea
-                    acceptedFiles={['image/*']}
-                    dropzoneText={"Drag and drop an image of a tomato plant leaf to process"}
-                    onChange={onSelectFile}
-                  />
-                </CardContent>}
-              </Card>
-
-              {flag == 0 ?
-                <div style={{ "height": "850px", "marginTop": "100px", "paddingTop": "50px", "background": "#90EE90", "borderRadius": "10px" }}>
-                  <div style={quizContainerStyle}>
-                    {/*Questions and Answers */}
-                    <div style={activeQuestionStyle}>
-                      <p>{initialQuestion.question}</p>
-                      <ul>
-                        {initialQuestion.options.map((option, optionIndex) => (
-                          <li
-                            key={optionIndex}
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'center',
-                              padding: '10px',
-                              border: '1px solid #ccc',
-                              borderRadius: '5px',
-                              marginBottom: '8px',
-                              cursor: 'pointer',
-                              transition: 'background-color 0.3s',
-                              ...(selectedOptions.includes(initialQuestion.labels[optionIndex]) ? selectedOptionStyle : optionStyle)
-                            }}
-                            onClick={() => handleTypeOptionClick(option, initialQuestion.labels[optionIndex])}
-                          >
-
-                            {option}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div style={buttonContainerStyle}>
-                      <button
-                        style={Object.assign({}, nextButtonStyle, currentQuestion === questions.length - 1 && hoverButtonStyle)}
-                        onClick={handleTypeSubmission}
-                      >
-                        Submit
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                :
-                <div style={{ "height": "850px", "marginTop": "100px", "paddingTop": "50px", "background": "#90EE90", "borderRadius": "10px" }}>
-                  <div style={quizContainerStyle}>
-                    {/* Circular buttons */}
-                    <div style={circleButtonContainerStyle}>
-                      {questions.map((q, index) => (
-                        <div
-                          key={q.id}
-                          style={index === currentQuestion ? highlightedCircleButtonStyle : circleButtonStyle}
-                          onClick={() => handleCircleButtonClick(index)}
-                        >
-                          {index + 1}
-                        </div>
-                      ))}
-                    </div>
-
-                    {/*Questions and Answers */}
-                    {questions.map((q, index) => (
-                      <div key={q.id} style={index === currentQuestion ? activeQuestionStyle : questionStyle}>
-                        <p>{q.question}</p>
-                        <ul>
-                          {q.options.map((option, optionIndex) => (
-                            <li
-                              key={optionIndex}
-                              style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                padding: '10px',
-                                border: '1px solid #ccc',
-                                borderRadius: '5px',
-                                marginBottom: '8px',
-                                cursor: 'pointer',
-                                transition: 'background-color 0.3s',
-                                ...(q.labels[optionIndex] === selectedOption ? selectedOptionStyle : optionStyle)
-                              }}
-                              onClick={() => handleOptionClick(option, q.labels[optionIndex])}
-                            >
-                              {option}
-                              {q.images && q.images[optionIndex] && (
-                                <img
-                                  src={q.images[optionIndex]}
-                                  alt={`Image for ${option}`}
-                                  style={{ ...imageStyle }}
-                                  // style={{ maxWidth: '200px', maxHeight: '250px', marginLeft: '10px' }}
-                                  onMouseEnter={handleImageHover}
-                                  onMouseLeave={handleImageLeave}
-                                />
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                    <div style={buttonContainerStyle}>
-                      <button
-                        style={{ ...previousButtonStyle, display: currentQuestion === 0 ? 'none' : 'inline-block' }}
-                        onClick={handlePreviousQuestion}
-                      >
-                        Previous Question
-                      </button>
-                      <button
-                        style={Object.assign({}, nextButtonStyle, currentQuestion === questions.length - 1 && hoverButtonStyle)}
-                        onClick={handleNextQuestion}
-                      >
-                        {currentQuestion === questions.length - 1 ? 'Finish' : 'Next Question'}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
               }
-
-
-              <div style={{ "display": "flex", "alignItems": "center", "justifyContent": "center", "marginTop": "60px" }}>
-                <button onClick={handleSubmit} style={{ ...buttonStyles2, "marginBottom": "50px" }}>Submit and predict</button>
-              </div>
+                <div style={{ "display": "flex", "alignItems": "center", "justifyContent": "center", "marginTop": "60px" }}>
+                  <button onClick={handleSubmit} style={{ ...buttonStyles2, "marginBottom": "50px" }}>{isLoading ? <CircularProgress /> : "Submit and Predict"}</button>
+                </div>
+              </div>}
 
             </Grid>}
 
