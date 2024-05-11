@@ -1,10 +1,11 @@
 {
-  "name": "photo",
+  "name": "agrom",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.61",
     "axios": "^0.21.4",
     "material-ui-dropzone": "^3.5.0",
     "react": "^17.0.2",

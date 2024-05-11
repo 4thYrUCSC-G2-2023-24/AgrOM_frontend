@@ -140,5 +140,3 @@ export const initialQuestion = {
     options: ['Leaf symptom', 'Stem symptom', 'Fruit symptom', 'Flower symptom', 'Special symptom (Fungal Symptom, Odor symptom, Webbing, Wilting)'],
     labels: ['leaf_symp', 'stem_symp', 'fruit_symp', 'flower_symp', 'special_symp'],
 }
-
-
