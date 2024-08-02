@@ -608,7 +608,7 @@ const handleCircleButtonClick = (index) => {
   const steps = [
     'Upload Tomato Leaf Image',
     'Detect Disease Leaves',
-    'Segment Disease Leaves',
+    // 'Segment Disease Leaves',
     'Detect Disease Symptoms',
     'Answer Questions On Extra Symptoms'
   ];
@@ -635,6 +635,55 @@ const handleCircleButtonClick = (index) => {
     setCurrentStep(currentStep - 1);
   };
 
+  // const handleNextStep = async (event) => {
+  //   // Your logic for handling each step
+  //   if (currentStep < (total_steps-1)) {
+  //     if (!image) {
+  //       setErrorMessage('Please upload an image before continuing.');
+  //       setOpenSnackbar(true);
+  //       return;
+  //     }
+  //     if(currentStep === 0){      
+  //       setIsLoading(true);
+  //       try{
+  //         await uploadProcessImageFile();
+  //       } catch (error) {
+  //         setErrorMessage('Error uploading image: '+ error.message);
+  //         setOpenSnackbar(true);
+  //       } finally {
+  //         setIsLoading(false);
+  //       }
+  //     }
+  //     else if(currentStep === 1){
+  //       setIsLoading(true);
+  //       try{
+  //         await uploadSegmentLeaves();
+  //       } catch (error) {
+  //         setErrorMessage('Error uploading image: ', error.message);
+  //         setOpenSnackbar(true);
+  //       } finally {
+  //         setIsLoading(false);
+  //       }
+  //     }
+  //     else if(currentStep === 2){
+  //       setIsLoading(true);
+  //       try{
+  //         await uploadDetectSymptoms();
+  //       } catch (error) {
+  //         setErrorMessage('Error uploading image: ', error.message);
+  //         setOpenSnackbar(true);
+  //       } finally {
+  //         setIsLoading(false);
+  //       }  
+  //     }
+  //     else if(currentStep === 3){
+  //       setCurrentStep(currentStep + 1);
+  //     }
+  //   } else {
+  //     handleSubmit();
+  //   }
+  // };
+
   const handleNextStep = async (event) => {
     // Your logic for handling each step
     if (currentStep < (total_steps-1)) {
@@ -657,17 +706,6 @@ const handleCircleButtonClick = (index) => {
       else if(currentStep === 1){
         setIsLoading(true);
         try{
-          await uploadSegmentLeaves();
-        } catch (error) {
-          setErrorMessage('Error uploading image: ', error.message);
-          setOpenSnackbar(true);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-      else if(currentStep === 2){
-        setIsLoading(true);
-        try{
           await uploadDetectSymptoms();
         } catch (error) {
           setErrorMessage('Error uploading image: ', error.message);
@@ -676,7 +714,7 @@ const handleCircleButtonClick = (index) => {
           setIsLoading(false);
         }  
       }
-      else if(currentStep === 3){
+      else if(currentStep === 2){
         setCurrentStep(currentStep + 1);
       }
     } else {
@@ -1044,8 +1082,8 @@ const handleCircleButtonClick = (index) => {
                   </Typography>
                 </Box>
               </Box>}
-
-              {currentStep===2 && <Box style={{ backgroundColor: 'white', maxWidth: '100%', padding: '5px', marginBottom: '40px'}}>
+              
+              {/*currentStep===2 && <Box style={{ backgroundColor: 'white', maxWidth: '100%', padding: '5px', marginBottom: '40px'}}>
 
                 <Box style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
                   <Card className={`${classes.imageCard} ${!segmentationMaskImage ? classes.imageCardEmpty : ''}`} style={{ maxHeight: '350px', margin: '10px', width: '100%' }}>
@@ -1077,13 +1115,10 @@ const handleCircleButtonClick = (index) => {
                   <Typography variant="h6" gutterBottom>
                     Segmentation Mask and Segmented Image of disease leaves
                   </Typography>
-                  {/* <Typography variant="h5" gutterBottom>
-                    Predicted Disease: {possibleDiseasesAfterSegmentation} 
-                  </Typography> */}
                 </Box>
-              </Box>}
+              </Box> */}
 
-              {currentStep===3 && <Box style={{ backgroundColor: 'white', maxWidth: '100%', padding: '5px', marginBottom: '40px' }}>
+              {currentStep===2 && <Box style={{ backgroundColor: 'white', maxWidth: '100%', padding: '5px', marginBottom: '40px' }}>
 
                 <Card className={`${classes.imageCard} ${!detectedSymtomsImage ? classes.imageCardEmpty : ''}`} style={{ maxHeight: "350px" }}>
                   {detectedSymtomsImage && <CardActionArea>
@@ -1099,7 +1134,7 @@ const handleCircleButtonClick = (index) => {
 
                 <Box className={classes.descriptionBoxContent}>
                   <Typography variant="h6" gutterBottom>
-                    Symptoms detection model detect {detectedSymtoms} in disease leaves
+                    Symptoms detection model detect {detectedSymtoms==='' ? 'Nothing' : detectedSymtoms} in disease leaves
                   </Typography>
                   {/* <Typography variant="h5" gutterBottom>
                     Expected diseases are: 
@@ -1107,7 +1142,7 @@ const handleCircleButtonClick = (index) => {
                 </Box>
               </Box>}
 
-              {currentStep===4 && <div style={{ "height": "auto", "paddingTop": "50px", "borderRadius": "10px" }}>
+              {currentStep===3 && <div style={{ "height": "auto", "paddingTop": "50px", "borderRadius": "10px" }}>
               {flag == 0 ?
                 <div style={quizContainerStyle}>
                   {/*Questions and Answers */}
