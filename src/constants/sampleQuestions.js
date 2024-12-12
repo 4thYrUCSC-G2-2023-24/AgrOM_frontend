@@ -99,7 +99,7 @@ export const sampleSpecialQuestions = [{
     uid: 11,
     question: 'Is there any ooze liquid presence?',
     options: ['Yes', 'No'],
-    labels: ['Yes', 'No'],
+    labels: ['ooze', 'No'],
     images: ['./images/ooze.jpg']
 },
 {

@@ -491,14 +491,14 @@ const Questions = () => {
             "hasFruitHalo",
             "hasOdorSymptom",
             "hasCrossSection",
-            "hasOozeLiquid",
+            "hasOozeSymptom",
             "hasCracks",
             "hasPlantSymptom",
             "hasCurling",
             "hasFungalColour",
             "hasWebbing",
             "hasFlowerSymptom"
-        ];
+        ];  
         var symptom_set = {}
         for (var i = 0; i < questions.length; i++) {
 
